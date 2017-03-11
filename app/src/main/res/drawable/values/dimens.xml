@@ -1,0 +1,34 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <!-- MARGIN SETTING -->
+    <dimen name="activity_layout_margin">15dp</dimen>
+    <dimen name="activity_element_margin">10dp</dimen>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">10dp</dimen>
+    <dimen name="activity_top_margin">10dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- TEXT SIZE SETTING -->
+    <dimen name="search_member_text_size">23sp</dimen>
+    <dimen name="user_profile_text_size">25sp</dimen>
+    <dimen name="front_login_text_size">30sp</dimen>
+    <dimen name="existing_user_text_size">30sp</dimen>
+    <dimen name="distribution_list_text_size">25sp</dimen>
+
+    <!-- BUTTON SETTING -->
+    <dimen name="btn_padding">20dp</dimen>
+    <dimen name="btn_text_size">18sp</dimen>
+
+    <!-- LIST ITEM SETTING -->
+    <dimen name="list_item_left_margin">72dp</dimen>
+    <dimen name="list_item_height">48dp</dimen>
+
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">200dp</dimen>
+    <dimen name="text_size">25sp</dimen>
+    <dimen name="text_padding">16dp</dimen>
+    <dimen name="text_heading">24sp</dimen>
+
+</resources>

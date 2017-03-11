@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAllCaps="true"
+        android:text="@string/create_news"
+        android:id="@+id/tv_cnews_title"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/text_size"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="News Title"
+            android:id="@+id/tv_cnews_title_name"
+            android:textSize="@dimen/text_size"
+            android:padding="@dimen/text_padding"/>
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/et_cnews_title_name"
+            android:hint="Title Name"
+            android:textSize="@dimen/text_size"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="News Text"
+            android:id="@+id/tv_cpoll_num_ans"
+            android:textSize="@dimen/text_size"
+            android:padding="@dimen/text_padding"/>
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/et_cnews_message_body"
+            android:hint="Message Body"
+            android:inputType="textMultiLine"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbars="vertical"
+            android:textSize="@dimen/text_size"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Image"
+            android:id="@+id/tv_cnews_image_path"
+            android:textSize="@dimen/text_size"
+            android:padding="@dimen/text_padding"/>
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/bt_cnews_image_path"
+            android:hint="Find Path"
+            android:textSize="@dimen/text_size"/>
+    </LinearLayout>
+
+    <ImageView android:id="@+id/iv_cnews_image_selected"
+        android:layout_height="150dp"
+        android:layout_width="200dp"
+        android:layout_gravity="center"
+        android:padding="@dimen/text_padding"
+        android:visibility="invisible"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAllCaps="true"
+        android:text="Create"
+        android:id="@+id/bt_cnews_create"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/text_size"
+        android:background="@android:color/holo_orange_light"/>
+
+</LinearLayout>

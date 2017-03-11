@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">IIMP</string>
+
+    <string name="id">"ID"</string>
+    <string name="first_name">"First Name"</string>
+    <string name="last_name">"Last Name"</string>
+    <string name="emailid">"E-Mail ID"</string>
+    <string name="mobileno">"Mobile No."</string>
+    <string name="dob">"Date of Birth"</string>
+    <string name="gender">"Gender : "</string>
+    <string name="designation">"Designation : "</string>
+    <string name="doj">"Date of Joining"</string>
+    <string name="city">City : </string>
+    <string name="divison">Division : </string>
+    <string name="roles">Role : </string>
+    <string name="dl_doj">"Date of Joining : "</string>
+
+
+    <string name="btn_search_members">Search Members</string>
+    <string name="btn_user_name">User Profile</string>
+    <string name="btn_fetch_profile">Fetch Profile</string>
+    <string name="btn_search">Search</string>
+    <string name="btn_my_groups">My Groups</string>
+    <string name="btn_messaging">Messaging</string>
+
+
+    <string name="hello_world">YCCE PROJECT</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="from">From : </string>
+    <string name="date">Date : </string>
+    <string name="subject">Subject : </string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="create_poll">Create Poll</string>
+    <string name="poll_title">Poll Title :</string>
+    <string name="number_of_answers">Number of Answers :</string>
+    <string name="poll_results">Poll Results</string>
+    <string name="news_title">News Title</string>
+    <string name="news_image_content_desc">News supporting Image</string>
+    <string name="create_event">Create Event</string>
+    <string name="create_news">Create News</string>
+    <string name="dl_dob">Date of Birth :</string>
+    <string name="group_name">Group Name</string>
+    <string name="group_description">Group Description</string>
+    <string name="group_member">Group Members : </string>
+    <string name="member">Member :</string>
+    <string name="btn_add_members">Add Members</string>
+    <string name="btn_create_group">Create Group</string>
+    <string name="btn_group_details">Group Details</string>
+    <string name="done">Done</string>
+    <string name="register"><u>Register Now</u></string>
+    <string name="division">"Division : "</string>
+    <string name="btn_create_personal_message">Create Personal Message</string>
+
+
+</resources>

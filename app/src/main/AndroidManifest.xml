@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.liveproject.ycce.iimp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".volleyservice.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+        <activity
+            android:name=".splash.Activity_Splash"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        //////////////////////////////////////////////////////////////////////////////////////////
+
+        <activity
+            android:name=".login.Activity_FrontLogin"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.ycce.iimp.FRONT_LOGIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".login.alreadyregistered.Activity_OTP_Verification"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.ycce.iimp.OTP_VERIFICATION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".login.newregistration.Activity_Validate_NewRegistration"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.NR_LOGIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".login.Activity_FrontLogin" />
+        </activity>
+
+        <activity android:name=".login.newregistration.Activity_OTP_Verification_NewRegistration"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.OTP_VERIFICATION_NR" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".login.newregistration.Activity_NewRegistration_Form1"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.NR_FORM1" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".login.newregistration.Activity_NewRegistration_Form2"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.NR_FORM2" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".messaging.Activity_Home_Messaging"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.HOME_MESSAGING" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".networkservice.GetService" android:enabled="true" android:exported="false"/>
+        <service android:name=".networkservice.PostService" android:enabled="true" android:exported="false"/>
+
+
+    </application>
+</manifest>
