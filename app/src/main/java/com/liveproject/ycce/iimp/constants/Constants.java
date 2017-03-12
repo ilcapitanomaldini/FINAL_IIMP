@@ -24,4 +24,5 @@ public class Constants {
     public static final String SEARCH_MEMBERS_FOR_CUSTOMIZED_GROUP_URL = "searchcontactbyconditions";
     public static final String[] USERSTATUS ={"New","Active","Blocked"} ;
     public static final String GETUSERSTATUS_URL = "getuserstatus";
+    public static final String[] GROUPROLES ={"Admin","Management","Normal"};
 }

@@ -13,13 +13,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.R;
 import com.liveproject.ycce.iimp.news.NewsActivity;
+import com.liveproject.ycce.iimp.pendingrequests.PRActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,8 @@ public class Activity_Home_Messaging extends AppCompatActivity
         setContentView(R.layout.activity_home_messaging);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //TODO : Put the following function in a proper context/place.
+        DatabaseService.updateLoginDateTime();
 //        s_id = DatabaseService.fetchID();
         //      s_status = DatabaseService.fetchUserStatus(s_id);
       /*  getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -154,7 +157,7 @@ public class Activity_Home_Messaging extends AppCompatActivity
             i = new Intent("com.liveproject.persi.ycce.iimp.USER_PROFILE");
             startActivity(i);
         } else if (id == R.id.nav_pr) {
-            i = new Intent("com.liveproject.persi.ycce.iimp.PendingRequests.Pending_Requests");
+            i = new Intent(this, PRActivity.class);
             startActivity(i);
         }
 

@@ -21,7 +21,8 @@ public class NetworkReceiver extends BroadcastReceiver {
         //First, lets check whether the network has truly been connected or not.
         if (isOnline(context))
         {
-            Intent intent1 = new Intent(context,UpdateService.class);
+            //TODO : Add UpdateService as well.
+            Intent intent1 = new Intent(context,DowndateService.class);
             context.startService(intent1);
         }
     }

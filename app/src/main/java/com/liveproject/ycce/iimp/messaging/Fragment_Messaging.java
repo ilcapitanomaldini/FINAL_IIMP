@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.liveproject.ycce.iimp.DatabaseService;
+import com.liveproject.ycce.iimp.NullAdapter;
 import com.liveproject.ycce.iimp.R;
 import com.liveproject.ycce.iimp.messaging.personalmessaging.PersonalMessage;
 
@@ -41,10 +42,10 @@ public class Fragment_Messaging extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         rv = (RecyclerView) getView().findViewById(R.id.rv_personal_messaging);
-        llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
+        llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         //Trial to reverse the layout.
-        llm.setReverseLayout(true);
+        //llm.setReverseLayout(true);
         // llm.setStackFromEnd(true);
 
         rv.setLayoutManager(llm);
@@ -52,10 +53,17 @@ public class Fragment_Messaging extends Fragment {
         //Populate Arraylist with current messages.
         messagelist = new ArrayList<PersonalMessage>();
         messagelist = DatabaseService.fetchPersonalMessages();
-
-        //Call adapter for recyclerview layout by passing the arraylist.
-        adapter = new Adapter_PersonalMessageList(messagelist);
-        rv.setAdapter(adapter);
+        if(messagelist!=null) {
+            //Call adapter for recyclerview layout by passing the arraylist.
+            adapter = new Adapter_PersonalMessageList(messagelist);
+            rv.setAdapter(adapter);
+        }
+        else
+        {
+            ArrayList<String> strings = new ArrayList<String>();
+            strings.add("No Messages!");
+            rv.setAdapter(new NullAdapter(strings));
+        }
         setRecyclerViewScrollListener();
     }
 

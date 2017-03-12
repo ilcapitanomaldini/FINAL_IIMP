@@ -28,7 +28,9 @@ public class Activity_CreatePoll extends AppCompatActivity {
     LinearLayout llm;
     Poll poll;
     ArrayList<PollMapping> pollMappings;
+    ArrayList<EditText> editTexts;
     String gid;
+    int num;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class Activity_CreatePoll extends AppCompatActivity {
             public void onClick(View v) {
 
                 // Check whether the number provided is less than 10.
-                final int num = Integer.parseInt(Number.getText().toString());
+                num = Integer.parseInt(Number.getText().toString());
                 if (num > 4 && num < 2) {
                     Toast.makeText(Activity_CreatePoll.this, "Enter a number that is less than or equal to 10.", Toast.LENGTH_LONG).show();
                 } else {
@@ -57,6 +59,7 @@ public class Activity_CreatePoll extends AppCompatActivity {
                     poll = new Poll();
                     final String pid = new LocalIdGen().nextLocalId();
                     pollMappings = new ArrayList<PollMapping>();
+                    editTexts = new ArrayList<EditText>();
 
                     //Code for dynamic generation of EditText boxes where answers can be provided.
                     for (int i = 0; i < num; i++) {
@@ -69,6 +72,8 @@ public class Activity_CreatePoll extends AppCompatActivity {
                         editText = new EditText(Activity_CreatePoll.this);
                         editText.setTextSize(16);
                         editText.setId(i + 1);
+                        editText.setTag(Integer.toString(i+1));
+                        editTexts.add(editText);
                         ll.addView(textView, 0);
                         ll.addView(editText, 1);
                         llm.addView(ll);
@@ -102,16 +107,18 @@ public class Activity_CreatePoll extends AppCompatActivity {
                             i.putExtra("Result",result);
                             i.putExtra("ResultValue",resultvalue);
                             startActivity(i);*/
-                            int i = 1;
+                            int i = 0;
                             for (PollMapping pollMapping :
                                     pollMappings) {
-                                pollMapping.setAnswerTitle(v.findViewById(i++).toString());
+                                //pollMapping.setAnswerTitle(v.findViewById(i++).toString());
+                                EditText et = editTexts.get(i++);
+                                pollMapping.setAnswerTitle(et.getText().toString());
                             }
                             poll.setPm(pollMappings);
                             poll.setCreatorId(DatabaseService.fetchID());
                             // TODO : Set Duration.
                             poll.setDuration("Add Later");
-                            poll.setNumber_answers(Integer.getInteger(Number.getText().toString()));
+                            poll.setNumber_answers(num);
                             poll.setTitle(Title.getText().toString());
                             poll.setPid(pid);
 

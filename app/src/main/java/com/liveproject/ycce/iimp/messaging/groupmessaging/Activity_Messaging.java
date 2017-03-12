@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.liveproject.ycce.iimp.DatabaseService;
+import com.liveproject.ycce.iimp.NullAdapter;
 import com.liveproject.ycce.iimp.R;
 import com.liveproject.ycce.iimp.events.Activity_CreateEvent;
 import com.liveproject.ycce.iimp.polling.Activity_CreatePoll;
@@ -94,8 +95,15 @@ public class Activity_Messaging extends AppCompatActivity {
 
         //Call adapter for recyclerview layout by passing the arraylist.
         // adapter = new MessageRAdapter(messagelist);
-        adapter = new Adapter_Group_Message(messagelist);
-        rv.setAdapter(adapter);
+        if(messagelist!=null) {
+            adapter = new Adapter_Group_Message(messagelist);
+            rv.setAdapter(adapter);
+        }
+        else{
+            ArrayList<String> strings = new ArrayList<String>();
+            strings.add("No Messages!");
+            rv.setAdapter(new NullAdapter(strings));
+        }
         setRecyclerViewScrollListener();
     }
 

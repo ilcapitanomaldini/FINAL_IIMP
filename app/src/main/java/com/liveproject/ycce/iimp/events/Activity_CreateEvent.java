@@ -60,6 +60,7 @@ public class Activity_CreateEvent extends AppCompatActivity {
                 message.setSender(DatabaseService.fetchID());
                 message.setMessage(event.getEventMessage());
                 DatabaseService.insertMessage(message);
+                finish();
             }
         });
 

@@ -81,8 +81,8 @@ public class Activity_OTP_Verification extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onPause() {
+        super.onPause();
         this.unregisterReceiver(otp_validation);
         this.unregisterReceiver(user_profile);
     }

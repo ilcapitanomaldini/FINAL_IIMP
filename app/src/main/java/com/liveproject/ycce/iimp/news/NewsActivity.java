@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.liveproject.ycce.iimp.DatabaseService;
+import com.liveproject.ycce.iimp.NullAdapter;
 import com.liveproject.ycce.iimp.R;
 
 import java.util.ArrayList;
@@ -41,8 +42,17 @@ public class NewsActivity extends AppCompatActivity {
         messagelist = DatabaseService.fetchNews();
 
         //Call adapter for recyclerview layout by passing the arraylist.
-        adapter = new NewsRAdapter(messagelist);
-        rv.setAdapter(adapter);
+        if(messagelist!=null) {
+            adapter = new NewsRAdapter(messagelist);
+            rv.setAdapter(adapter);
+        }
+        else
+        {
+            ArrayList<String> strings = new ArrayList<String>();
+            strings.add("No News!");
+            strings.add("Neither Good nor Bad!");
+            rv.setAdapter(new NullAdapter(strings));
+        }
         setRecyclerViewScrollListener();
     }
 

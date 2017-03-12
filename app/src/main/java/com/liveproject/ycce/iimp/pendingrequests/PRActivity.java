@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.liveproject.ycce.iimp.DatabaseService;
+import com.liveproject.ycce.iimp.NullAdapter;
 import com.liveproject.ycce.iimp.R;
 import com.liveproject.ycce.iimp.networkservice.GetService;
 
@@ -49,6 +50,11 @@ public class PRActivity extends AppCompatActivity {
        // llm.setStackFromEnd(true);
 
         rv.setLayoutManager(llm);
+        ArrayList<String> strings = new ArrayList<String>();
+        strings.add("No Pending Requests!");
+        strings.add("Job Done!");
+        rv.setAdapter(new NullAdapter(strings));
+
 
         //Populate Arraylist with current messages.
        // messagelist = new ArrayList<PendingRequest>();
@@ -144,9 +150,12 @@ public class PRActivity extends AppCompatActivity {
                     }
                 }
             }catch (JSONException je){je.printStackTrace();}
-            adapter = new PRequestsRAdapter(messagelist);
-            rv.setAdapter(adapter);
-            setRecyclerViewScrollListener();
+            if(messagelist!=null) {
+                adapter = new PRequestsRAdapter(messagelist);
+                rv.setAdapter(adapter);
+                setRecyclerViewScrollListener();
+            }
+
         }
     }
 }

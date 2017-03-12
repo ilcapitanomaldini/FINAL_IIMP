@@ -18,8 +18,12 @@ import com.liveproject.ycce.iimp.pendingrequests.PendingRequest;
 import com.liveproject.ycce.iimp.polling.Poll;
 import com.liveproject.ycce.iimp.polling.PollMapping;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Tiger on 05-10-2016.
@@ -611,12 +615,13 @@ public class DatabaseService {
     }
 
     //Fetch my Groups using only a mobile no passed to it.
+    //TODO : Get all the required information correctly.
     //Fail Return : null
-    public static GroupClass[] getMyGroups(String Mob_no) {
-        String ids, names;
-        GroupClass[] result;
-        final SQLiteDatabase db = open();
-        Cursor cursor = db.rawQuery("select gid,gname from groups;", new String[]{});
+    public static ArrayList<GroupClass> getMyGroups(String Mob_no){
+        String ids,names;
+        ArrayList<GroupClass> result;
+        final SQLiteDatabase db =open();
+        Cursor cursor=db.rawQuery("select gid,gname,grouprole from groups;",new String[]{});
         //Cursor cursor =db.rawQuery("select " + GROUP_ID + " , " + GROUP_NAME + " from "+ TABLE_GROUP + " where " + GROUP_ID +
         //       " = ( select " + GROUPMAP_GID  + " from " + TABLE_GROUPMAP + " where " + GROUPMAP_UPID +
         //       " = ( select " + USERPROFILE_ID +  " from " + TABLE_USERPROFILE + " where " + USERPROFILE_MOBILE_NO + " = ?));",
@@ -624,19 +629,23 @@ public class DatabaseService {
         int length = cursor.getCount();
 
 
-        if (cursor != null && length > 0) {
-            result = new GroupClass[length];
+        if(cursor!=null && length>0) {
+            result = new ArrayList<>();
             cursor.moveToFirst();
 
             for (int i = 0; i < length; i++) {
-                ids = cursor.getString(0);
-                names = cursor.getString(1);
-                result[i] = new GroupClass(ids, names);
+                GroupClass group = new GroupClass();
+                group.setGid(cursor.getString(0));
+                group.setGName(cursor.getString(1));
+                group.setGRole(cursor.getString(2));
+                result.add(group);
                 cursor.moveToNext();
             }
             cursor.close();
+            db.close();
             return result;
-        } else
+        }
+        else
             return null;
     }
 
@@ -722,7 +731,7 @@ public class DatabaseService {
                 String result = cursor_new.getString(0);
                 cursor.close();
                 cursor_new.close();
-                db.close();
+                //db.close();
                 // HINT : RETURN CURRENT USER ID
                 return result;
             } else
@@ -1523,6 +1532,7 @@ public class DatabaseService {
         cv.put(POLL_PID, localID);
         cv.put(POLL_TITLE, poll.getTitle());
         cv.put(POLL_LOCAL_ID, localID);
+        db.insert(TABLE_POLL,null,cv);
         db.close();
         return localID;
     }
@@ -1572,6 +1582,24 @@ public class DatabaseService {
         ContentValues cval = new ContentValues();
         cval.put(MSG_POLL_ID, pollId);
         db.update(TABLE_GROUPMESSAGING, cval, MSG_ID + "= ?", new String[]{gmId});
+        db.close();
+    }
+
+    //LOGIN : insert the current date/time into the table :
+    //NOTE : The month variable has been incremented by one inside.
+    public static void updateLoginDateTime(){
+        final SQLiteDatabase db = open();
+        ContentValues contentValues = new ContentValues();
+        String DateTime;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH,calendar.get(Calendar.MONTH)+1);
+        Date date = calendar.getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd\'T\'hh:mm:ss\'Z\'", Locale.getDefault());
+        //calendar.setTime(simpleDateFormat.parse(event.getDateTime()));
+        try {
+            contentValues.put(LOGIN_LAST_LOGIN, simpleDateFormat.format(date));
+        }catch (IllegalArgumentException iae){iae.printStackTrace();}
+        db.update(TABLE_LOGIN,contentValues,null,null);
         db.close();
     }
 
