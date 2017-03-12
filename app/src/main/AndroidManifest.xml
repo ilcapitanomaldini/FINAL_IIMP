@@ -36,7 +36,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".login.alreadyregistered.Activity_OTP_Verification"
+        <activity
+            android:name=".login.alreadyregistered.Activity_OTP_Verification"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.liveproject.ycce.iimp.OTP_VERIFICATION" />
@@ -45,7 +46,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".login.newregistration.Activity_Validate_NewRegistration"
+        <activity
+            android:name=".login.newregistration.Activity_Validate_NewRegistration"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.liveproject.persi.ycce.iimp.NR_LOGIN" />
@@ -57,7 +59,8 @@
                 android:value=".login.Activity_FrontLogin" />
         </activity>
 
-        <activity android:name=".login.newregistration.Activity_OTP_Verification_NewRegistration"
+        <activity
+            android:name=".login.newregistration.Activity_OTP_Verification_NewRegistration"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.liveproject.persi.ycce.iimp.OTP_VERIFICATION_NR" />
@@ -66,7 +69,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".login.newregistration.Activity_NewRegistration_Form1"
+        <activity
+            android:name=".login.newregistration.Activity_NewRegistration_Form1"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.liveproject.persi.ycce.iimp.NR_FORM1" />
@@ -75,13 +79,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".login.newregistration.Activity_NewRegistration_Form2"
+        <activity
+            android:name=".login.newregistration.Activity_NewRegistration_Form2"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.liveproject.persi.ycce.iimp.NR_FORM2" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".login.newregistration.Activity_NewRegistration_Form1" />
         </activity>
 
         <activity
@@ -93,6 +101,32 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".userprofile.Activity_UserProfile"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.USER_PROFILE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".messaging.Activity_Home_Messaging" />
+        </activity>
+
+        <activity
+            android:name=".userprofile.Activity_EditProfile"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.EDIT_PROFILE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".userprofile.Activity_UserProfile" />
         </activity>
 
         <activity
@@ -185,28 +219,48 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".networkservice.GetService" android:enabled="true" android:exported="false"/>
-        <service android:name=".networkservice.PostService" android:enabled="true" android:exported="false"/>
-        <service android:name=".networkservice.updateservice.DowndateService" android:enabled="true" android:exported="false"/>
-        <service android:name=".networkservice.updateservice.UpdateService" android:enabled="true" android:exported="false"/>
+        <service
+            android:name=".networkservice.GetService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".networkservice.PostService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".networkservice.updateservice.DowndateService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".networkservice.updateservice.UpdateService"
+            android:enabled="true"
+            android:exported="false" />
 
-        <receiver android:name=".networkservice.updateservice.PMDownReceiver" android:enabled="true" android:exported="false">
+        <receiver
+            android:name=".networkservice.updateservice.PMDownReceiver"
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.PMDownReceiver"/>
+                <action android:name="android.intent.action.PMDownReceiver" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".networkservice.updateservice.GroupReceiver" android:enabled="true" android:exported="false">
+        <receiver
+            android:name=".networkservice.updateservice.GroupReceiver"
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.GroupReceiver"/>
+                <action android:name="android.intent.action.GroupReceiver" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".events.AlarmReceiver"/>
+        <receiver android:name=".events.AlarmReceiver" />
 
-        <receiver android:name=".networkservice.updateservice.NetworkReceiver"  android:exported="true">
+        <receiver
+            android:name=".networkservice.updateservice.NetworkReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>

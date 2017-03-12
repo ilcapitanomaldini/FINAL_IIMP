@@ -67,7 +67,7 @@ public class Activity_NewRegistration_Form1 extends AppCompatActivity {
 
     private Adapter_MultiCheck_Roles adapter_multiCheck_roles;
 
-    String s_id, s_firstname, s_lastname, s_emailid, s_mobileno, s_gender, s_dob, s_doj, s_designation, s_division, s_division_id;
+    String s_firstname, s_lastname, s_emailid, s_mobileno, s_gender, s_dob, s_doj, s_designation, s_division, s_division_id;
     String URL;
     ArrayList<String> designationArray = new ArrayList<>();
     ArrayList<String> divisionArray = new ArrayList<>();
