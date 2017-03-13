@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.liveproject.ycce.iimp.R;
+import com.liveproject.ycce.iimp.userprofile.Activity_UserProfile;
 
 import java.util.ArrayList;
 
@@ -108,6 +109,7 @@ public class PRequestsRAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         private TextView pr_user_name;
         private TextView pr_user_designation;
+        private String cid, prid;
 
 
         public PRUserHolder(View itemView) {
@@ -115,24 +117,25 @@ public class PRequestsRAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             pr_user_name = (TextView) itemView.findViewById(R.id.tv_pr_user_name);
             pr_user_designation = (TextView) itemView.findViewById(R.id.tv_pr_user_designation);
-
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            //OnClick on an individual message in the view. Currently, an activity(blank) opens up.
-            //Better if onHold or the like would be used.
+            //For User Type
+            //Sends cid, prid
             Context context = itemView.getContext();
-            Intent showIntent = new Intent(context, PRActivity.class);
-            //showIntent.putExtra("pmid",pmid);
+            Intent showIntent = new Intent(context, Activity_UserProfile.class);
+            showIntent.putExtra("cid",cid);
+            showIntent.putExtra("prid",prid);
             context.startActivity(showIntent);
         }
         public void bindMessage(PendingRequest n) {
             //Actual binding function.
             //Change the inner textview values
             pr_user_name.setText(n.getUid_poster());
-
+            prid = n.getPrid();
+            cid = n.getUid_poster_id();
             pr_user_designation.setText(n.getType());
         }
     }
@@ -142,6 +145,7 @@ public class PRequestsRAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         //This class handles the mapping of each view and the individual messages according to the layout.
         //HINT :: Any changes made to the layout of an individual message should also be reflected here.
         private TextView pr_group_name;
+        private String gid, prid;
 
         public PRGroupHolder(View itemView) {
             super(itemView);
@@ -152,16 +156,16 @@ public class PRequestsRAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         public void onClick(View v) {
-            //OnClick on an individual message in the view. Currently, an activity(blank) opens up.
-            //Better if onHold or the like would be used.
             Context context = itemView.getContext();
-            Intent showIntent = new Intent(context, PRActivity.class);
-            //showIntent.putExtra("pmid",pmid);
-            context.startActivity(showIntent);
+            /*Intent showIntent = new Intent(context, Activity_Group_Details.class);
+            showIntent.putExtra("gid",gid);
+            showIntent.putExtra("prid",prid);
+            context.startActivity(showIntent);*/
         }
         public void bindMessage(PendingRequest n) {
             //Actual binding function.
-
+            prid = n.getPrid();
+            gid = n.getAdditional_info();
             pr_group_name.setText(n.getAdditional_info());
         }
     }
