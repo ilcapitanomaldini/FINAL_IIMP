@@ -121,7 +121,6 @@ public class Activity_CreatePoll extends AppCompatActivity {
                             poll.setNumber_answers(num);
                             poll.setTitle(Title.getText().toString());
                             poll.setPid(pid);
-
                             DatabaseService.insertPoll(poll);
                             Message message = new Message();
                             message.setEventID("null");

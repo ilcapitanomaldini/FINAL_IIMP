@@ -1246,7 +1246,7 @@ public class DatabaseService {
         cval.put(MSG_POLL_ID, message.getPollID());
         cval.put(MSG_LOCAL_ID, new LocalIdGen().nextLocalId());
         cval.put(MSG_FROM, message.getSender());
-
+        Log.d("Message : ", "insertMessage: " + message.getPollID());
         db.insert(TABLE_GROUPMESSAGING, null, cval);
 
         db.close();
@@ -1516,7 +1516,7 @@ public class DatabaseService {
         for (PollMapping pollMapping :
                 poll.getPm()) {
             ContentValues cv = new ContentValues();
-            cv.put(POLL_MAPPING_PID, localID);
+            cv.put(POLL_MAPPING_PID, poll.getPid());
             cv.put(POLL_MAPPING_AID, "null");
             cv.put(POLL_MAPPING_ANSWER_TITLE, pollMapping.getAnswerTitle());
             cv.put(POLL_MAPPING_NUM_VOTES, "0");
@@ -1529,7 +1529,8 @@ public class DatabaseService {
         cv.put(POLL_DURATION, poll.getDuration());
         //cv.put(POLL_GID,poll.get);
         cv.put(POLL_NUM_ANS, poll.getNumber_answers());
-        cv.put(POLL_PID, localID);
+        cv.put(POLL_PID, poll.getPid());
+        Log.d("Poll : ", "onClick: " + poll.getPid());
         cv.put(POLL_TITLE, poll.getTitle());
         cv.put(POLL_LOCAL_ID, localID);
         db.insert(TABLE_POLL,null,cv);

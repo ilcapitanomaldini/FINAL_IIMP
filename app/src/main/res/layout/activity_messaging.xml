@@ -75,6 +75,6 @@
             android:layout_marginRight="@dimen/fab_margin"
             android:layout_marginEnd="22dp"
             android:layout_alignTop="@+id/fab_event"
-            android:layout_toStartOf="@+id/fab_event" />
+            android:layout_toStartOf="@+id/fab_event"/>
     </RelativeLayout>
 </FrameLayout>

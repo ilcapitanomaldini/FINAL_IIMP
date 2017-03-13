@@ -53,7 +53,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private TextView grouptitle;
         private ImageView iv_1,iv_2,iv_3;
-        private String gid;
+        private String gid,gname;
 
         public GroupHolder(View itemView) {
             super(itemView);
@@ -71,7 +71,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             grouptitle.setText(n.getGName());
             String role = n.getGRole();
             gid = n.getGid();
-            //TODO : Check the constant string values with those in Salesforce Objects. Also, move them to a constants file.
+            gname = n.getGName();
             if(role.equals(Constants.GROUPROLES[1]))
             {
                 iv_3.setVisibility(View.GONE);
@@ -88,6 +88,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public void onClick(View v) {
             Intent i = new Intent(v.getContext(),Activity_Messaging.class);
             i.putExtra("gid",gid);
+            i.putExtra("gname",gname);
             v.getContext().startActivity(i);
         }
     }
