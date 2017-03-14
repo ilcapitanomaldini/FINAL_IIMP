@@ -9,6 +9,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -188,12 +189,15 @@ public class Activity_UserProfile extends AppCompatActivity {
             String response = intent.getStringExtra("Result");
             String error = intent.getStringExtra("Error");
 
+            progressBar.setVisibility(View.INVISIBLE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
             if (error != null) {
                 toast.makeText(getBaseContext(), "Please check your internet connection!!", Toast.LENGTH_LONG).show();
+                finish();
             } else if (response != null) {
                 JSONService jsonService = new JSONService(response);
                 member = jsonService.parseSearchByID();
-                toast.makeText(getBaseContext(), response, Toast.LENGTH_SHORT).show();
 
                 MemberPersonalInfo memberPersonalInfo = new MemberPersonalInfo(member.getMemberPersonalInfo());
                 MemberAddress memberAddress = new MemberAddress(member.getMemaddr());
@@ -217,7 +221,11 @@ public class Activity_UserProfile extends AppCompatActivity {
                         s_roles = s_roles + ", " + roles.get(i);
                     }
                 }
-                tv_roles.setText(s_roles);
+                if (s_roles != null) {
+                    tv_roles.setText(s_roles);
+                } else {
+                    tv_roles.setText("No Extra roles.");
+                }
 
                 tv_address.setText(memberAddress.getAddrline() + ", " + memberAddress.getStreet() + ", "
                         + memberAddress.getLocality() + ", " + memberAddress.getCity() + ", "
@@ -238,6 +246,7 @@ public class Activity_UserProfile extends AppCompatActivity {
             if (error != null) {
                 toast.makeText(getBaseContext(), "Please check your internet connection!!", Toast.LENGTH_LONG).show();
             } else if (response != null) {
+                Log.d("RESPONSE", "onReceive: " + response);
                 if (response.equalsIgnoreCase("\"true\"")) {
                     Intent intent1 = new Intent(getBaseContext(), PRActivity.class);
                     toast.makeText(getBaseContext(), "Request Accepted!!", Toast.LENGTH_SHORT).show();
@@ -260,6 +269,7 @@ public class Activity_UserProfile extends AppCompatActivity {
             if (error != null) {
                 toast.makeText(getBaseContext(), "Please check your internet connection!!", Toast.LENGTH_LONG).show();
             } else if (response != null) {
+                Log.d("RESPONSE", "onReceive: " + response);
                 if (response.equalsIgnoreCase("\"true\"")) {
                     Intent intent1 = new Intent(getBaseContext(), PRActivity.class);
                     toast.makeText(getBaseContext(), "Request Rejected!!", Toast.LENGTH_SHORT).show();

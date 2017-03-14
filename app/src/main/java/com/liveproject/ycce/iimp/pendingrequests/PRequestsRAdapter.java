@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.liveproject.ycce.iimp.R;
+import com.liveproject.ycce.iimp.messaging.groupmessaging.Activity_Group_Details;
 import com.liveproject.ycce.iimp.userprofile.Activity_UserProfile;
 
 import java.util.ArrayList;
@@ -126,8 +127,8 @@ public class PRequestsRAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             //Sends cid, prid
             Context context = itemView.getContext();
             Intent showIntent = new Intent(context, Activity_UserProfile.class);
-            showIntent.putExtra("cid",cid);
-            showIntent.putExtra("prid",prid);
+            showIntent.putExtra("CID",cid);
+            showIntent.putExtra("PRID",prid);
             context.startActivity(showIntent);
         }
         public void bindMessage(PendingRequest n) {
@@ -157,10 +158,10 @@ public class PRequestsRAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         public void onClick(View v) {
             Context context = itemView.getContext();
-            /*Intent showIntent = new Intent(context, Activity_Group_Details.class);
-            showIntent.putExtra("gid",gid);
-            showIntent.putExtra("prid",prid);
-            context.startActivity(showIntent);*/
+            Intent showIntent = new Intent(context, Activity_Group_Details.class);
+            showIntent.putExtra("GID",gid);
+            showIntent.putExtra("PRID",prid);
+            context.startActivity(showIntent);
         }
         public void bindMessage(PendingRequest n) {
             //Actual binding function.

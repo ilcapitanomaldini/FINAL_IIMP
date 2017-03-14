@@ -157,6 +157,8 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".messaging.Activity_Home_Messaging" />
         </activity>
 
         <activity android:name=".creation.groups.Activity_GroupCreation"
