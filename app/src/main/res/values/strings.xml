@@ -52,6 +52,7 @@
     <string name="division">"Division : "</string>
     <string name="btn_create_personal_message">Create Personal Message</string>
     <string name="next">Next</string>
+    <string name="type">Type : </string>
 
 
 </resources>

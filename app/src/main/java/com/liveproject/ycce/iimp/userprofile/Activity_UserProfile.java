@@ -10,6 +10,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +24,7 @@ import com.liveproject.ycce.iimp.MemberPersonalInfo;
 import com.liveproject.ycce.iimp.R;
 import com.liveproject.ycce.iimp.constants.Constants;
 import com.liveproject.ycce.iimp.networkservice.GetService;
+import com.liveproject.ycce.iimp.pendingrequests.PRActivity;
 
 import java.util.List;
 
@@ -32,9 +36,12 @@ public class Activity_UserProfile extends AppCompatActivity {
 
     TextView tv_designation, tv_mobile, tv_email, tv_division, tv_handler, tv_address, tv_dob, tv_doj, tv_gender, tv_roles;
     Toast toast;
-    BroadcastReceiver userprofile;
+    BroadcastReceiver userprofile, pendingrequestaccepted, pendingrequestrejected;
+    LinearLayout l1;
+    FloatingActionButton fab_accept, fab_reject;
+    ProgressBar progressBar;
 
-    String s_roles, s_id;
+    String s_roles, s_id, s_prid;
     String URL;
 
     Member member;
@@ -43,10 +50,12 @@ public class Activity_UserProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_up);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.up_tb);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        s_id = getIntent().getStringExtra("CID");
+        s_prid = getIntent().getStringExtra("PRID");
 
         tv_designation = (TextView) findViewById(R.id.cp_tv_designation);
         tv_mobile = (TextView) findViewById(R.id.cp_tv_mobile);
@@ -58,21 +67,59 @@ public class Activity_UserProfile extends AppCompatActivity {
         tv_dob = (TextView) findViewById(R.id.cp_tv_dob);
         tv_gender = (TextView) findViewById(R.id.cp_tv_gender);
         tv_roles = (TextView) findViewById(R.id.cp_tv_roles);
-
+        progressBar = (ProgressBar) findViewById(R.id.up_pb);
 
         if (s_id != null) {
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.up_fab);
+            fab.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
             URL = Constants.SITE_URL + Constants.SEARCHCONTACT_URL + "?id=" + s_id;
             Intent intent = new Intent(getBaseContext(), GetService.class);
             intent.putExtra("URL", URL);
             intent.putExtra("NAME", "UserProfile");
             getBaseContext().startService(intent);
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_up);
-            fab.setVisibility(View.GONE);
+            if (s_prid != null) {
+                l1 = (LinearLayout) findViewById(R.id.cp_ll_pending_request);
+                l1.setVisibility(View.VISIBLE);
+                fab_accept = (FloatingActionButton) findViewById(R.id.cp_fab_accept);
+                fab_reject = (FloatingActionButton) findViewById(R.id.cp_fab_reject);
+
+                fab_accept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                        URL = Constants.SITE_URL + Constants.PROCESSPENDINGREQUEST_URL + "?prid=" + s_id + "&action=accept";
+                        Intent intent = new Intent(getBaseContext(), GetService.class);
+                        intent.putExtra("URL", URL);
+                        intent.putExtra("NAME", "PendingRequestAccepted");
+                        getBaseContext().startService(intent);
+                    }
+                });
+
+                fab_reject.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                        URL = Constants.SITE_URL + Constants.PROCESSPENDINGREQUEST_URL + "?prid=" + s_id + "&action=reject";
+                        Intent intent = new Intent(getBaseContext(), GetService.class);
+                        intent.putExtra("URL", URL);
+                        intent.putExtra("NAME", "PendingRequestRejected");
+                        getBaseContext().startService(intent);
+                    }
+                });
+            }
+
         } else {
             member = DatabaseService.getMember(DatabaseService.fetchID());
             MemberPersonalInfo memberPersonalInfo = new MemberPersonalInfo(member.getMemberPersonalInfo());
             MemberAddress memberAddress = new MemberAddress(member.getMemaddr());
-            CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.ctl_up);
+            CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.up_ctl);
             collapsingToolbarLayout.setTitle(memberPersonalInfo.getFirstname() + " " + memberPersonalInfo.getLastname());
             collapsingToolbarLayout.setCollapsedTitleGravity(View.TEXT_ALIGNMENT_CENTER);
 
@@ -103,7 +150,7 @@ public class Activity_UserProfile extends AppCompatActivity {
                     + memberAddress.getState() + ", " + memberAddress.getCountry() + " - "
                     + memberAddress.getPincode());
 
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_up);
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.up_fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -119,13 +166,19 @@ public class Activity_UserProfile extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         userprofile = new UserProfile();
-        this.registerReceiver(userprofile, new IntentFilter("android.intent.action.OTPReceiver"));
+        this.registerReceiver(userprofile, new IntentFilter("android.intent.action.UserProfile"));
+        pendingrequestaccepted = new PendingRequestAccepted();
+        this.registerReceiver(pendingrequestaccepted, new IntentFilter("android.intent.action.PendingRequestAccepted"));
+        pendingrequestrejected = new PendingRequestRejected();
+        this.registerReceiver(pendingrequestrejected, new IntentFilter("android.intent.action.PendingRequestRejected"));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         this.unregisterReceiver(userprofile);
+        this.unregisterReceiver(pendingrequestaccepted);
+        this.unregisterReceiver(pendingrequestrejected);
     }
 
     private class UserProfile extends BroadcastReceiver {
@@ -144,7 +197,7 @@ public class Activity_UserProfile extends AppCompatActivity {
 
                 MemberPersonalInfo memberPersonalInfo = new MemberPersonalInfo(member.getMemberPersonalInfo());
                 MemberAddress memberAddress = new MemberAddress(member.getMemaddr());
-                CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.ctl_up);
+                CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.up_ctl);
                 collapsingToolbarLayout.setTitle(memberPersonalInfo.getFirstname() + " " + memberPersonalInfo.getLastname());
                 collapsingToolbarLayout.setCollapsedTitleGravity(View.TEXT_ALIGNMENT_GRAVITY);
 
@@ -170,6 +223,50 @@ public class Activity_UserProfile extends AppCompatActivity {
                         + memberAddress.getLocality() + ", " + memberAddress.getCity() + ", "
                         + memberAddress.getState() + ", " + memberAddress.getCountry() + " - "
                         + memberAddress.getPincode());
+            }
+        }
+    }
+
+    private class PendingRequestAccepted extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String response = intent.getStringExtra("Result");
+            String error = intent.getStringExtra("Error");
+            progressBar.setVisibility(View.INVISIBLE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            if (error != null) {
+                toast.makeText(getBaseContext(), "Please check your internet connection!!", Toast.LENGTH_LONG).show();
+            } else if (response != null) {
+                if (response.equalsIgnoreCase("\"true\"")) {
+                    Intent intent1 = new Intent(getBaseContext(), PRActivity.class);
+                    toast.makeText(getBaseContext(), "Request Accepted!!", Toast.LENGTH_SHORT).show();
+                    startActivity(intent1);
+                } else {
+                    toast.makeText(getBaseContext(), "Something went wrong. Please try again!!!", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+    private class PendingRequestRejected extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String response = intent.getStringExtra("Result");
+            String error = intent.getStringExtra("Error");
+            progressBar.setVisibility(View.INVISIBLE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            if (error != null) {
+                toast.makeText(getBaseContext(), "Please check your internet connection!!", Toast.LENGTH_LONG).show();
+            } else if (response != null) {
+                if (response.equalsIgnoreCase("\"true\"")) {
+                    Intent intent1 = new Intent(getBaseContext(), PRActivity.class);
+                    toast.makeText(getBaseContext(), "Request Rejected!!", Toast.LENGTH_SHORT).show();
+                    startActivity(intent1);
+                } else {
+                    toast.makeText(getBaseContext(), "Something went wrong. Please try again!!!", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }

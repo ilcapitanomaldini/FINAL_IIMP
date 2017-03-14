@@ -7,9 +7,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.NullAdapter;
@@ -27,7 +30,9 @@ public class Activity_Messaging extends AppCompatActivity {
     private Adapter_Group_Message adapter;
     private ArrayList<Message> messagelist;
     String currentgid="101";
+    String groupname;
 
+    private Toolbar toolbar;
     private FloatingActionButton fab_events,fab_poll;
     private RecyclerView rv;
     private LinearLayoutManager llm;
@@ -37,6 +42,27 @@ public class Activity_Messaging extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
         currentgid = getIntent().getStringExtra("gid");
+        groupname = getIntent().getStringExtra("gname");
+
+        try {
+            toolbar = (Toolbar) findViewById(R.id.app_bar);
+            setSupportActionBar(toolbar);
+            TextView tv_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
+            tv_title.setText(groupname);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            Log.e("Toolbar", "onCreate: " + e.toString());
+        }
+
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(),Activity_Group_Details.class);
+                intent.putExtra("GID", currentgid);
+                startActivity(intent);
+            }
+        });
 
         send = (ImageButton) findViewById(R.id.bt_send);
         sender = (EditText) findViewById(R.id.et_message);

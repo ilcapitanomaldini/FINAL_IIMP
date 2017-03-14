@@ -19,10 +19,12 @@ public class Constants {
 
     public static final String[] STATUS = {"inactive", "otpgenerated", "otpverified","otpverifiednewuser", "active"};
     public static final String[] GENDER = {"Any", "Male", "Female"};
-    public static final String[] DATE = {"Before", "On", "After"};
+    public static final String[] DATE = {"Null","Before", "On", "After"};
     public static final int MIN_AGE_LIMIT = 18;
     public static final String SEARCH_MEMBERS_FOR_CUSTOMIZED_GROUP_URL = "searchcontactbyconditions";
     public static final String[] USERSTATUS ={"New","Active","Blocked"} ;
     public static final String GETUSERSTATUS_URL = "getuserstatus";
     public static final String[] GROUPROLES ={"Admin","Management","Normal"};
+    public static final String CREATEGROUP_URL = "creategroup";
+    public static final String PROCESSPENDINGREQUEST_URL = "processpendingrequest";
 }

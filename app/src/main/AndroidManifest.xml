@@ -159,6 +159,28 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".creation.groups.Activity_GroupCreation"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.GROUP_CREATION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".messaging.Activity_Home_Messaging" />
+        </activity>
+
+        <activity android:name=".creation.groups.conditionalgroup.Activity_DistributionList_ConditionalGroup"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.DISTRIBUTIONLIST_CONDITIONAL_GROUP" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".creation.groups.Activity_GroupCreation" />
+        </activity>
+
         <activity
             android:name=".events.Activity_CreateEvent"
             android:screenOrientation="portrait">

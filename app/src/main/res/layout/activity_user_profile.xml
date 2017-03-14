@@ -6,14 +6,14 @@
     android:fitsSystemWindows="false">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/ab_up"
+        android:id="@+id/up_ab"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:background="@color/colorPrimary"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/ctl_up"
+            android:id="@+id/up_ctl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -32,7 +32,7 @@
                 app:layout_collapseParallaxMultiplier="0.7" />
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/tb_up"
+                android:id="@+id/up_tb"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
                 android:minHeight="?android:attr/actionBarSize"
@@ -46,12 +46,26 @@
     <include layout="@layout/content_profile" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_mode_edit_24dp"
-        app:layout_anchor="@id/ab_up"
-        app:layout_anchorGravity="bottom|end" />
+    android:id="@+id/up_fab"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/fab_margin"
+    android:src="@drawable/ic_mode_edit_24dp"
+    app:layout_anchor="@id/up_ab"
+    app:layout_anchorGravity="bottom|end" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/up_pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
