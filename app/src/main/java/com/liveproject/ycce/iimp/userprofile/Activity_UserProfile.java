@@ -93,7 +93,7 @@ public class Activity_UserProfile extends AppCompatActivity {
                         progressBar.setVisibility(View.VISIBLE);
                         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                        URL = Constants.SITE_URL + Constants.PROCESSPENDINGREQUEST_URL + "?prid=" + s_id + "&action=accept";
+                        URL = Constants.SITE_URL + Constants.PROCESSPENDINGREQUEST_URL + "?prid=" + s_prid + "&action=accept";
                         Intent intent = new Intent(getBaseContext(), GetService.class);
                         intent.putExtra("URL", URL);
                         intent.putExtra("NAME", "PendingRequestAccepted");
@@ -107,7 +107,7 @@ public class Activity_UserProfile extends AppCompatActivity {
                         progressBar.setVisibility(View.VISIBLE);
                         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                        URL = Constants.SITE_URL + Constants.PROCESSPENDINGREQUEST_URL + "?prid=" + s_id + "&action=reject";
+                        URL = Constants.SITE_URL + Constants.PROCESSPENDINGREQUEST_URL + "?prid=" + s_prid + "&action=reject";
                         Intent intent = new Intent(getBaseContext(), GetService.class);
                         intent.putExtra("URL", URL);
                         intent.putExtra("NAME", "PendingRequestRejected");
