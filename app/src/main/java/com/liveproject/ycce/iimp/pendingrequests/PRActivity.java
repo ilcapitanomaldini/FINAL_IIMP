@@ -9,6 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.widget.TextView;
 
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.NullAdapter;
@@ -38,10 +41,16 @@ public class PRActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_request);
 
-
-
-
-
+        try {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+            setSupportActionBar(toolbar);
+            TextView tv_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
+            tv_title.setText("Pending Request");
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            Log.e("Toolbar", "onCreate: " + e.toString());
+        }
         rv = (RecyclerView) findViewById(R.id.rv_pr);
         llm = new LinearLayoutManager(this);
 
@@ -54,7 +63,6 @@ public class PRActivity extends AppCompatActivity {
         strings.add("No Pending Requests!");
         strings.add("Job Done!");
         rv.setAdapter(new NullAdapter(strings));
-
 
         //Populate Arraylist with current messages.
        // messagelist = new ArrayList<PendingRequest>();
@@ -155,7 +163,6 @@ public class PRActivity extends AppCompatActivity {
                 rv.setAdapter(adapter);
                 setRecyclerViewScrollListener();
             }
-
         }
     }
 }

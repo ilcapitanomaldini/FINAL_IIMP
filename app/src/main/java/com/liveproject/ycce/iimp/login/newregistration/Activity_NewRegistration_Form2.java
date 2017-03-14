@@ -317,8 +317,6 @@ public class Activity_NewRegistration_Form2 extends AppCompatActivity {
                     if (DatabaseService.insertUserProfile(m) && DatabaseService.insertRoles(memberPersonalInfo.getRoles(), memberPersonalInfo.getId())) {
                         // HINT : DATABASE ENTRY OF STATUS VERIFIED.
                         DatabaseService.statusUpdate(Constants.STATUS[4]);
-                        toast.makeText(getBaseContext(), "Successfull", Toast.LENGTH_SHORT).show();
-
                         Intent i = new Intent(getBaseContext(), Activity_Home_Messaging.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);

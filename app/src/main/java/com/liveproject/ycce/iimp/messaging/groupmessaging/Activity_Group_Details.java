@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.liveproject.ycce.iimp.MemberPersonalInfo;
 import com.liveproject.ycce.iimp.R;
+import com.liveproject.ycce.iimp.adapters.Adapter_Group_Members;
 import com.liveproject.ycce.iimp.viewholder.Header_Members;
 
 import java.util.ArrayList;
@@ -24,12 +25,16 @@ import java.util.List;
 
 public class Activity_Group_Details extends AppCompatActivity {
 
-    public Adapter_Group_Members adapter;
+    private String s_gid,s_extra;
+    private Adapter_Group_Members adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.group_details);
+        setContentView(R.layout.activity_group_details);
+
+        s_gid = getIntent().getStringExtra("GID");
+        s_extra = getIntent().getStringExtra("EXTRA");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tb_gd);
         setSupportActionBar(toolbar);
@@ -46,6 +51,12 @@ public class Activity_Group_Details extends AppCompatActivity {
         RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
         if (animator instanceof DefaultItemAnimator) {
             ((DefaultItemAnimator) animator).setSupportsChangeAnimations(false);
+        }
+
+
+        if(s_gid != null && s_extra != null){
+
+
         }
 
         List<MemberPersonalInfo> memberlist = getMemberList();
