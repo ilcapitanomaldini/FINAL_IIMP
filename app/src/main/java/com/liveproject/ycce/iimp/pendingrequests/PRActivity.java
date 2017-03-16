@@ -1,5 +1,28 @@
 package com.liveproject.ycce.iimp.pendingrequests;
 
+
+/*COPYRIGHT NOTICE
+
+Copyright By "YCCE TEAM" on 15-03-2017.
+
+Members of "YCCE TEAM" are stated in the postscript.
+
+We, the creators of this software (i.e. developers) referenced as "YCCE TEAM" or "we" from here on,
+allow the person who gets this software and/or code for the software to present this software/code
+in a presentation dated 16-03-2017 only. Any further usage would be deemed to be breach of contract.
+ Accepting this software/code is legally binding and would mean that the terms stated here have been
+  accepted. The person does not have the right to copy/modify/distribute or in any form make the
+  software or code available to anyone without the explicit permission of all the members of
+   "YCCE TEAM". It is the responsibility of the aforementioned person that this software/code
+   does not get illegally distributed till the time the person is in possession of the software/code.
+
+P.S. :
+Members of "YCCE TEAM" :
+1. Aakash Wankhede
+2. Akash Kahalkar
+3. Mayur Dongare
+4. Ved Mehta*/
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -162,6 +185,12 @@ public class PRActivity extends AppCompatActivity {
                 adapter = new PRequestsRAdapter(messagelist);
                 rv.setAdapter(adapter);
                 setRecyclerViewScrollListener();
+            }
+            else {
+                ArrayList<String> strings = new ArrayList<String>();
+                strings.add("No Pending Requests!");
+                strings.add("Job Done!");
+                rv.setAdapter(new NullAdapter(strings));
             }
         }
     }

@@ -24,7 +24,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/sender"
+            android:id="@+id/ll_text_sender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

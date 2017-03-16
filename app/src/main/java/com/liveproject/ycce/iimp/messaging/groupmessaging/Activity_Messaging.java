@@ -1,6 +1,9 @@
 package com.liveproject.ycce.iimp.messaging.groupmessaging;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,7 +20,11 @@ import android.widget.TextView;
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.NullAdapter;
 import com.liveproject.ycce.iimp.R;
+import com.liveproject.ycce.iimp.Validation;
+import com.liveproject.ycce.iimp.constants.Constants;
 import com.liveproject.ycce.iimp.events.Activity_CreateEvent;
+import com.liveproject.ycce.iimp.networkservice.updateservice.GroupMessageService;
+import com.liveproject.ycce.iimp.networkservice.updateservice.UpdateService;
 import com.liveproject.ycce.iimp.polling.Activity_CreatePoll;
 
 import java.util.ArrayList;
@@ -31,6 +38,8 @@ public class Activity_Messaging extends AppCompatActivity {
     private ArrayList<Message> messagelist;
     String currentgid="101";
     String groupname;
+    String grouprole;
+    BroadcastReceiver receiver;
 
     private Toolbar toolbar;
     private FloatingActionButton fab_events,fab_poll;
@@ -43,6 +52,7 @@ public class Activity_Messaging extends AppCompatActivity {
         setContentView(R.layout.activity_messaging);
         currentgid = getIntent().getStringExtra("gid");
         groupname = getIntent().getStringExtra("gname");
+        grouprole = getIntent().getStringExtra("grole");
 
         try {
             toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -69,41 +79,62 @@ public class Activity_Messaging extends AppCompatActivity {
         fab_events = (FloatingActionButton) findViewById(R.id.fab_event);
         fab_poll = (FloatingActionButton) findViewById(R.id.fab_poll);
 
+        if(!grouprole.equals(Constants.GROUPROLES[2])) {
 
-        fab_events.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), Activity_CreateEvent.class);
-                intent.putExtra("gid",currentgid);
-                startActivity(intent);
-            }
-        });
+            fab_events.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getBaseContext(), Activity_CreateEvent.class);
+                    intent.putExtra("gid", currentgid);
+                    startActivityForResult(intent,1);
+                }
+            });
 
-        fab_poll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), Activity_CreatePoll.class);
-                intent.putExtra("gid",currentgid);
-                startActivity(intent);
-            }
-        });
+            fab_poll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getBaseContext(), Activity_CreatePoll.class);
+                    intent.putExtra("gid", currentgid);
+                    startActivityForResult(intent,2);
+                }
+            });
 
-        send.setOnClickListener(new View.OnClickListener() {
+            send.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                //TO DO :: Add a send_message_to_cloud() function here. SQLite for demonstration purposes only.
-                Message message = new Message();
-                message.setType("text");
-                message.setSender(DatabaseService.fetchID());
-                message.setMessage(sender.getText().toString());
-                message.setGid(currentgid);
-                message.setEventID("null");
-                message.setPollID("null");
-                message.setMid("null");
-                DatabaseService.insertMessage(message);
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    //TO DO :: Add a send_message_to_cloud() function here. SQLite for demonstration purposes only.
+                    Message message = new Message();
+                    message.setType("text");
+                    message.setSender(DatabaseService.fetchID());
+                    message.setMessage(sender.getText().toString());
+                    message.setGid(currentgid);
+                    message.setEventID("null");
+                    message.setPollID("null");
+                    message.setMid("null");
+                    DatabaseService.insertMessage(message);
+                    if (Validation.isOnline(v.getContext()))
+                    {
+                        Intent intent1 = new Intent(v.getContext(),UpdateService.class);
+                        v.getContext().startService(intent1);
+                    }
+                    messagelist = new ArrayList<Message>();
+                    messagelist = DatabaseService.fetchMessages(currentgid);
+
+                    //TODO : Add an actual notifyItemInserted.
+                    if(messagelist!=null) {
+                        adapter = new Adapter_Group_Message(messagelist);
+                        rv.setAdapter(adapter);
+                    }
+                }
+            });
+        }
+        else
+        {
+            fab_events.setVisibility(View.GONE);
+            fab_poll.setVisibility(View.GONE);
+            findViewById(R.id.ll_text_sender).setVisibility(View.GONE);
+        }
 
 
         rv = (RecyclerView) findViewById(R.id.rv_messaging);
@@ -130,7 +161,12 @@ public class Activity_Messaging extends AppCompatActivity {
             strings.add("No Messages!");
             rv.setAdapter(new NullAdapter(strings));
         }
+        Intent intent = new Intent(this, GroupMessageService.class);
+        intent.putExtra("gid",currentgid);
+        intent.putExtra("receiver","MessageReceiver");
+        startService(intent);
         setRecyclerViewScrollListener();
+
     }
 
     /*  @Override
@@ -164,4 +200,80 @@ public class Activity_Messaging extends AppCompatActivity {
         });
     }
 
+  /*  @Override
+    protected void onResume() {
+        super.onResume();
+        messagelist = new ArrayList<Message>();
+        messagelist = DatabaseService.fetchMessages(currentgid);
+        if(messagelist!=null) {
+            adapter = new Adapter_Group_Message(messagelist);
+            rv.setAdapter(adapter);
+        }
+    }
+*/
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1){
+            messagelist = new ArrayList<Message>();
+            messagelist = DatabaseService.fetchMessages(currentgid);
+            if(messagelist!=null) {
+                adapter = new Adapter_Group_Message(messagelist);
+                rv.setAdapter(adapter);
+            }
+            if (Validation.isOnline(this))
+            {
+                Intent intent1 = new Intent(this,UpdateService.class);
+                this.startService(intent1);
+            }
+        }
+        if(requestCode==2){
+            messagelist = new ArrayList<Message>();
+            messagelist = DatabaseService.fetchMessages(currentgid);
+            if(messagelist!=null) {
+                adapter = new Adapter_Group_Message(messagelist);
+                rv.setAdapter(adapter);
+            }
+            if (Validation.isOnline(this))
+            {
+                Intent intent1 = new Intent(this,UpdateService.class);
+                this.startService(intent1);
+            }
+        }
+    }
+    public class MessageReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            messagelist = new ArrayList<Message>();
+            messagelist = DatabaseService.fetchMessages(currentgid);
+
+            //Call adapter for recyclerview layout by passing the arraylist.
+            // adapter = new MessageRAdapter(messagelist);
+            if(messagelist!=null) {
+                adapter = new Adapter_Group_Message(messagelist);
+                rv.setAdapter(adapter);
+            }
+            else{
+                ArrayList<String> strings = new ArrayList<String>();
+                strings.add("No Messages!");
+                rv.setAdapter(new NullAdapter(strings));
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        receiver = new MessageReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.intent.action.MessageReceiver");
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
 }

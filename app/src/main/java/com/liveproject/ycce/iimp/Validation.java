@@ -1,5 +1,9 @@
 package com.liveproject.ycce.iimp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import com.liveproject.ycce.iimp.constants.Constants;
 
 import java.text.DateFormat;
@@ -72,5 +76,14 @@ public class Validation {
             return false;
         else
             return true;
+    }
+
+    //Validation to check whether the context passed tot he function is online or not.
+    public static boolean isOnline(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        //should check null because in airplane mode it will be null
+        return (netInfo != null && netInfo.isConnected());
     }
 }

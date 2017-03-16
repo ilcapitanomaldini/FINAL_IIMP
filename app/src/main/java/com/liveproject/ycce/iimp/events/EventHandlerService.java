@@ -48,7 +48,7 @@ public class EventHandlerService extends Service {
                eventList.add(event);
                Calendar calendar = Calendar.getInstance();
                PendingIntent pendingIntent;
-
+                //TODO : Change the status of the event in the DB.
                //Convert String to Calendar using a SimpleDateFormat
                try {
 
@@ -73,7 +73,9 @@ public class EventHandlerService extends Service {
                else {
                    alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
                }
+               DatabaseService.updateEventStatus(event.getEID());
            }
        }
+       stopSelf();
    }
 }

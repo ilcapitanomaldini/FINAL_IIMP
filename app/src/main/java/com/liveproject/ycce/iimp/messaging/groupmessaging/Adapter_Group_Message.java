@@ -1,5 +1,7 @@
 package com.liveproject.ycce.iimp.messaging.groupmessaging;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -237,6 +239,8 @@ public class Adapter_Group_Message extends RecyclerView.Adapter<RecyclerView.Vie
         private RadioButton rb2;
         private RadioButton rb3;
         private RadioButton rb4;
+        private final String sendPollAnswerURL = "https://ycc-developer-edition.ap2.force.com/member/services/apexrest/sendingmypollanswer";
+
 
         public PollHolder(View itemView) {
             super(itemView);
@@ -254,66 +258,100 @@ public class Adapter_Group_Message extends RecyclerView.Adapter<RecyclerView.Vie
             //Actual binding function.
             //Change the inner textview values
             final Poll poll = n;
-            num = n.getNumber_answers();
-            pollname.setText(n.getTitle());
-            if("polled".equals(DatabaseService.checkPollStatus(n.getPid())))
-            {
-                select.setText("View Results");
-                select.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(itemView.getContext(), Activity_PollResults.class);
-                        intent.putExtra("Title",poll.getTitle());
-                        ArrayList<PollMapping> pollMappings = DatabaseService.fetchPollMappingByPollID(poll.getPid());
-                        try {
-                            String[] result = new String[pollMappings.size()];
-                            float[] resultvalues = new float[pollMappings.size()];
-                            int i = 0;
-                            for (PollMapping pollmap :
-                                    pollMappings) {
-                                result[i] = pollmap.getAnswerTitle();
-                                resultvalues[i] = Float.parseFloat(pollmap.getNumberOfVotes());
-                                i++;
+            if(n!=null) {
+                num = n.getNumber_answers();
+                pollname.setText(n.getTitle());
+                if ("polled".equals(DatabaseService.checkPollStatus(n.getPid()))) {
+                    select.setText("View Results");
+                    select.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(itemView.getContext(), Activity_PollResults.class);
+                            intent.putExtra("Title", poll.getTitle());
+                            ArrayList<PollMapping> pollMappings = DatabaseService.fetchPollMappingByPollID(poll.getPid());
+                            try {
+                                String[] result = new String[pollMappings.size()];
+                                float[] resultvalues = new float[pollMappings.size()];
+                                int i = 0;
+                                for (PollMapping pollmap :
+                                        pollMappings) {
+                                    result[i] = pollmap.getAnswerTitle();
+                                    resultvalues[i] = Float.parseFloat(pollmap.getNumberOfVotes());
+                                    i++;
+                                }
+                                intent.putExtra("Result", result);
+                                intent.putExtra("ResultValue", resultvalues);
+                            } catch (NullPointerException npe) {
+                                npe.printStackTrace();
                             }
-                            intent.putExtra("Result", result);
-                            intent.putExtra("ResultValue",resultvalues);
-                        }catch (NullPointerException npe){npe.printStackTrace();}
-                        itemView.getContext().startActivity(intent);
-                    }
-                });
-                answer_group.setVisibility(View.GONE);
-            }
-            else {
-                if (num == 2) {
-                    rb1.setText(n.getPm().get(0).getAnswerTitle());
-                    rb2.setText(n.getPm().get(1).getAnswerTitle());
-                    rb3.setVisibility(View.GONE);
-                    rb4.setVisibility(View.GONE);
-                } else if (num == 3) {
-                    rb1.setText(n.getPm().get(0).getAnswerTitle());
-                    rb2.setText(n.getPm().get(1).getAnswerTitle());
-                    rb3.setText(n.getPm().get(2).getAnswerTitle());
-                    rb4.setVisibility(View.GONE);
+                            itemView.getContext().startActivity(intent);
+                        }
+                    });
+                    answer_group.setVisibility(View.GONE);
                 } else {
-                    rb1.setText(n.getPm().get(0).getAnswerTitle());
-                    rb2.setText(n.getPm().get(1).getAnswerTitle());
-                    rb3.setText(n.getPm().get(2).getAnswerTitle());
-                    rb4.setText(n.getPm().get(3).getAnswerTitle());
-                }
-
-                select.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //Add the sqlite entry into poll table here.
-                        RadioButton rb_answer;
-                        rb_answer = (RadioButton) itemView.findViewById(answer_group.getCheckedRadioButtonId());
-                        String answer = rb_answer.getText().toString();
-                        DatabaseService.updatePollMappingAnswerNumberByTitle(answer);
-                        DatabaseService.setPollStatus("polled", poll.getPid());
-                        answer_group.setVisibility(View.GONE);
-                        select.setVisibility(View.GONE);
+                    if (num == 2) {
+                        rb1.setText(n.getPm().get(0).getAnswerTitle());
+                        rb2.setText(n.getPm().get(1).getAnswerTitle());
+                        rb3.setVisibility(View.GONE);
+                        rb4.setVisibility(View.GONE);
+                    } else if (num == 3) {
+                        rb1.setText(n.getPm().get(0).getAnswerTitle());
+                        rb2.setText(n.getPm().get(1).getAnswerTitle());
+                        rb3.setText(n.getPm().get(2).getAnswerTitle());
+                        rb4.setVisibility(View.GONE);
+                    } else {
+                        rb1.setText(n.getPm().get(0).getAnswerTitle());
+                        rb2.setText(n.getPm().get(1).getAnswerTitle());
+                        rb3.setText(n.getPm().get(2).getAnswerTitle());
+                        rb4.setText(n.getPm().get(3).getAnswerTitle());
                     }
-                });
+
+                    select.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Add the sqlite entry into poll table here.
+                            RadioButton rb_answer;
+                            rb_answer = (RadioButton) itemView.findViewById(answer_group.getCheckedRadioButtonId());
+                            String answer = rb_answer.getText().toString();
+                            DatabaseService.updatePollMappingAnswerNumberByTitle(answer);
+                            DatabaseService.setPollStatus("polled", poll.getPid());
+                            //Cloud Connectivity!
+                            /*
+                            Intent volleyIntent;
+                            volleyIntent = new Intent(v.getContext(), PostService.class);
+                            volleyIntent.putExtra("URL", sendPollAnswerURL);
+                            volleyIntent.putExtra("NAME", "PollAnswerReceiver");
+
+                            final JSONObject params = new JSONObject();
+                            String pamid = " ";
+                            try {
+                                params.put("cid", poll.getCreatorId());
+                                for (PollMapping pollMapping :
+                                        poll.getPm()) {
+                                    if (pollMapping.getAnswerTitle().equals(answer)) {
+                                        pamid = pollMapping.getAid();
+                                    }
+                                }
+                                params.put("pamid", pamid);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            volleyIntent.putExtra("JSONOBJECT", params.toString());
+                            v.getContext().startService(volleyIntent);
+                            */
+                        }
+                    });
+                }
+            }
+        }
+
+        public class PollAnswerReceiver extends BroadcastReceiver{
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                answer_group.setVisibility(View.GONE);
+                select.setVisibility(View.GONE);
+                //itemView.invalidate();
             }
         }
     }

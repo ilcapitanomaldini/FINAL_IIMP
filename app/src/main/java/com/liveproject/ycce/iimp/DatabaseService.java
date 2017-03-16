@@ -1147,6 +1147,17 @@ public class DatabaseService {
 
     }
 
+    //EVENTS : update the event status.
+    public static void updateEventStatus(String id) {
+        final SQLiteDatabase db = open();
+
+        ContentValues cval = new ContentValues();
+        cval.put(EVENTS_STATUS, "done");
+        db.update(TABLE_EVENTS, cval, EVENTS_ID + "= ?", new String[]{id});
+        db.close();
+
+    }
+
     //MESSAGING : fetch all group messages by mID. Returns array of messages.
     //Fail Return : null.
     public static ArrayList<Message> fetchMessagesById(String id) {
@@ -1238,6 +1249,10 @@ public class DatabaseService {
         final SQLiteDatabase db = open();
 
         ContentValues cval = new ContentValues();
+        if(!message.getMid().equals("null")) {
+            if(DatabaseService.checkIfMessageExistsByID(message.getMid()))
+                return false;
+        }
         cval.put(MSG_ID, message.getMid());
         cval.put(MSG_TYPE, message.getType());
         cval.put(MSG_GID, message.getGid());
@@ -1272,15 +1287,39 @@ public class DatabaseService {
         return true;
     }
 
+    //EVENTS : Check whether the event already exists.
+    //Fail Return : boolean false.
+    public static boolean checkIfEventExistsByID(String gID) {
+        final SQLiteDatabase db = open();
+        Cursor cursor_new = db.query(TABLE_EVENTS,
+                new String[]{EVENTS_ID},
+                EVENTS_ID + "=?",
+                new String[]{gID},
+                null, null, null, null);
+        if (cursor_new == null || cursor_new.getCount() <= 0)
+            return false;
+        else {
+            cursor_new.moveToFirst();
+            if (cursor_new.getString(0).equals(gID)) {
+                cursor_new.close();
+                return true;
+            } else
+                return false;
+        }
+    }
+
     //EVENTS : insert new Event using a new Event Object.
     public static boolean insertnewEvent(Event event) {
         final SQLiteDatabase db = open();
         ContentValues contentValues = new ContentValues();
-
+        if(DatabaseService.checkIfEventExistsByID(event.getEID())){
+            return false;
+        }
         contentValues.put(EVENTS_ID, event.getEID());
         contentValues.put(EVENTS_DURATION, event.getDuration());
         contentValues.put(EVENTS_DATETIME, event.getDateTime());
         contentValues.put(EVENTS_GID, event.getGID());
+        contentValues.put(EVENTS_MESSAGE, event.getEventMessage());
         contentValues.put(EVENTS_STATUS, "new");
         contentValues.put(EVENTS_POSTED_BY, event.getPostedBy());
 
@@ -1513,14 +1552,16 @@ public class DatabaseService {
         final SQLiteDatabase db = open();
         String localID = new LocalIdGen().nextLocalId();
         //Insert into poll mapping table first.
-        for (PollMapping pollMapping :
-                poll.getPm()) {
-            ContentValues cv = new ContentValues();
-            cv.put(POLL_MAPPING_PID, poll.getPid());
-            cv.put(POLL_MAPPING_AID, "null");
-            cv.put(POLL_MAPPING_ANSWER_TITLE, pollMapping.getAnswerTitle());
-            cv.put(POLL_MAPPING_NUM_VOTES, "0");
-            db.insert(TABLE_POLLMAPPING, null, cv);
+        if(poll.getPm()!=null) {
+            for (PollMapping pollMapping :
+                    poll.getPm()) {
+                ContentValues cv = new ContentValues();
+                cv.put(POLL_MAPPING_PID, poll.getPid());
+                cv.put(POLL_MAPPING_AID, "null");
+                cv.put(POLL_MAPPING_ANSWER_TITLE, pollMapping.getAnswerTitle());
+                cv.put(POLL_MAPPING_NUM_VOTES, "0");
+                db.insert(TABLE_POLLMAPPING, null, cv);
+            }
         }
         //Now the Poll table entry.
         ContentValues cv = new ContentValues();
@@ -1543,6 +1584,8 @@ public class DatabaseService {
         final SQLiteDatabase db = open();
         for (GroupClass groupClass :
                 groupClasses) {
+            if (DatabaseService.checkIfGroupExistsByID(groupClass.getGid()))
+                continue;
             ContentValues cv = new ContentValues();
             cv.put(GROUP_ID, groupClass.getGid());
             cv.put(GROUP_NAME, groupClass.getGName());
@@ -1552,6 +1595,48 @@ public class DatabaseService {
             db.insert(TABLE_GROUP, null, cv);
         }
         db.close();
+    }
+
+    //GROUP : Check whether the group already exists.
+    //Fail Return : boolean false.
+    public static boolean checkIfGroupExistsByID(String gID) {
+        final SQLiteDatabase db = open();
+        Cursor cursor_new = db.query(TABLE_GROUP,
+                new String[]{GROUP_ID},
+                GROUP_ID + "=?",
+                new String[]{gID},
+                null, null, null, null);
+        if (cursor_new == null || cursor_new.getCount() <= 0)
+            return false;
+        else {
+            cursor_new.moveToFirst();
+            if (cursor_new.getString(0).equals(gID)) {
+                cursor_new.close();
+                return true;
+            } else
+                return false;
+        }
+    }
+
+    //MESSAGE : Check whether the message already exists.
+    //Fail Return : boolean false.
+    public static boolean checkIfMessageExistsByID(String gID) {
+        final SQLiteDatabase db = open();
+        Cursor cursor_new = db.query(TABLE_GROUPMESSAGING,
+                new String[]{MSG_ID},
+                MSG_ID + "=?",
+                new String[]{gID},
+                null, null, null, null);
+        if (cursor_new == null || cursor_new.getCount() <= 0)
+            return false;
+        else {
+            cursor_new.moveToFirst();
+            if (cursor_new.getString(0).equals(gID)) {
+                cursor_new.close();
+                return true;
+            } else
+                return false;
+        }
     }
 
     //POLL : update the poll ID.
@@ -1602,6 +1687,31 @@ public class DatabaseService {
         }catch (IllegalArgumentException iae){iae.printStackTrace();}
         db.update(TABLE_LOGIN,contentValues,null,null);
         db.close();
+    }
+
+    //LOGIN : insert the date/time into the table with a changed year value :
+    //NOTE : The month variable has been incremented by one inside.
+    public static void updateLoginDateTimeByYear(int year){
+        final SQLiteDatabase db = open();
+        ContentValues contentValues = new ContentValues();
+        String DateTime;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH,calendar.get(Calendar.MONTH)+1);
+        calendar.set(Calendar.YEAR,year);
+        Date date = calendar.getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd\'T\'hh:mm:ss\'Z\'", Locale.getDefault());
+        //calendar.setTime(simpleDateFormat.parse(event.getDateTime()));
+        try {
+            contentValues.put(LOGIN_LAST_LOGIN, simpleDateFormat.format(date));
+        }catch (IllegalArgumentException iae){iae.printStackTrace();}
+        db.update(TABLE_LOGIN,contentValues,null,null);
+        db.close();
+    }
+
+    //POLL : delete Poll by ID.
+    public static void deletePollByID(String pid){
+        final SQLiteDatabase db = open();
+        db.delete(TABLE_POLL, POLL_PID + "= ?", new String[]{pid});
     }
 
 

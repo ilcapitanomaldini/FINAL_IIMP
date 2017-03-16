@@ -243,6 +243,10 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".events.AlarmService" android:enabled="true" android:exported="false"/>
+        <service android:name=".events.EventHandlerService" android:enabled="true" android:exported="false"/>
+        <service android:name=".networkservice.updateservice.GroupMessageService" android:enabled="true" android:exported="false"/>
+
         <service
             android:name=".networkservice.GetService"
             android:enabled="true"
@@ -255,6 +259,7 @@
             android:name=".networkservice.updateservice.DowndateService"
             android:enabled="true"
             android:exported="false" />
+
         <service
             android:name=".networkservice.updateservice.UpdateService"
             android:enabled="true"
@@ -277,6 +282,15 @@
                 <action android:name="android.intent.action.GroupReceiver" />
             </intent-filter>
         </receiver>
+        
+        <receiver
+            android:name=".messaging.groupmessaging.Adapter_Group_Message$PollHolder$PollAnswerReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.PollAnswerReceiver" />
+            </intent-filter>
+        </receiver>
 
         <receiver android:name=".events.AlarmReceiver" />
 
@@ -286,6 +300,33 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".networkservice.updateservice.PMReceiver" android:enabled="true" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.PMReceiver"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".networkservice.updateservice.GMReceiver" android:enabled="true" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.GMReceiver"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".networkservice.updateservice.EventReceiver" android:enabled="true" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.EventReceiver"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".networkservice.updateservice.NewsReceiver" android:enabled="true" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.NewsReceiver"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".networkservice.updateservice.PollReceiver" android:enabled="true" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.PollReceiver"/>
             </intent-filter>
         </receiver>
 

@@ -132,6 +132,7 @@ public class Activity_CreatePoll extends AppCompatActivity {
                             message.setSender(DatabaseService.fetchID());
                             message.setMessage(poll.getTitle());
                             DatabaseService.insertMessage(message);
+                            finish();
                         }
                     });
                     llm.addView(button);

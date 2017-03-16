@@ -16,7 +16,6 @@ import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.NullAdapter;
 import com.liveproject.ycce.iimp.R;
 import com.liveproject.ycce.iimp.creation.groups.Activity_GroupCreation;
-import com.liveproject.ycce.iimp.messaging.groupmessaging.Activity_Group_Details;
 import com.liveproject.ycce.iimp.messaging.groupmessaging.GroupClass;
 
 import java.util.ArrayList;
@@ -98,6 +97,23 @@ public class Fragment_Groups extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        grouplist = new ArrayList<GroupClass>();
+        grouplist = DatabaseService.getMyGroups(DatabaseService.fetchMobileNo());
+        if(grouplist!=null) {
+            adapter = new GroupAdapter(grouplist);
+            rv.setAdapter(adapter);
+        }
+        else{
+            ArrayList<String> strings = new ArrayList<String>();
+            strings.add("No Groups Joined!");
+            rv.setAdapter(new NullAdapter(strings));
+        }
+        rv.invalidate();
     }
 
     @Nullable

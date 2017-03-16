@@ -11,7 +11,9 @@ import android.widget.ImageView;
 
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.R;
+import com.liveproject.ycce.iimp.Validation;
 import com.liveproject.ycce.iimp.filemanager.Activity_File;
+import com.liveproject.ycce.iimp.networkservice.updateservice.UpdateService;
 
 import java.io.File;
 
@@ -82,6 +84,11 @@ public class Activity_CreateNews extends AppCompatActivity {
                     news.setMessage(body.getText().toString());
                     news.setImage_loc(imageloc);
                     DatabaseService.insertNewNews(news);
+                    if (Validation.isOnline(v.getContext()))
+                    {
+                        Intent intent1 = new Intent(v.getContext(),UpdateService.class);
+                        v.getContext().startService(intent1);
+                    }
                     //Trial to send the image file onto the server.
 /*
 

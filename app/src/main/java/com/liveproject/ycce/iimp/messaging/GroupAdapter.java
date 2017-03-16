@@ -53,7 +53,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private TextView grouptitle;
         private ImageView iv_1,iv_2,iv_3;
-        private String gid,gname;
+        private String gid,gname,grole;
 
         public GroupHolder(View itemView) {
             super(itemView);
@@ -69,14 +69,14 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             //Actual binding function.
             //Change the inner textview values
             grouptitle.setText(n.getGName());
-            String role = n.getGRole();
+            grole = n.getGRole();
             gid = n.getGid();
             gname = n.getGName();
-            if(role.equals(Constants.GROUPROLES[1]))
+            if(grole.equals(Constants.GROUPROLES[1]))
             {
                 iv_3.setVisibility(View.GONE);
             }
-            else if (role.equals(Constants.GROUPROLES[2]))
+            else if (grole.equals(Constants.GROUPROLES[2]))
             {
                 iv_3.setVisibility(View.GONE);
                 iv_2.setVisibility(View.GONE);
@@ -89,6 +89,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Intent i = new Intent(v.getContext(),Activity_Messaging.class);
             i.putExtra("gid",gid);
             i.putExtra("gname",gname);
+            i.putExtra("grole",grole);
             v.getContext().startActivity(i);
         }
     }

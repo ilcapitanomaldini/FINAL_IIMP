@@ -30,14 +30,15 @@ public class PollReceiver extends BroadcastReceiver {
         String result = intent.getStringExtra("Result");
         if (result != null) {
             currentPoll = DatabaseService.fetchPoll("current");
+            currentPoll.setPid(result.substring(1, result.length() - 1));
             DatabaseService.updatePollByID("current", result.substring(1, result.length() - 1));
             DatabaseService.updatePollMappingID("current", result.substring(1, result.length() - 1));
             // Update pollID in message
             DatabaseService.updatePollIdinMessage(result.substring(1, result.length() - 1), "pollcurrent");
 
-            // TO DO : ADD the UPDATE PID in POLLMAPPING Table HERE.
+            // TODO : ADD the UPDATE PID in POLLMAPPING Table HERE.
 
-            Intent volleyIntent;
+            Intent volleyIntent, intentGM;
             try {
                 ArrayList<PollMapping> pollMappings = currentPoll.getPm();
                 volleyIntent = new Intent(context, PostService.class);
@@ -61,9 +62,9 @@ public class PollReceiver extends BroadcastReceiver {
             }
 
             Message message = new ArrayList<Message>(DatabaseService.fetchMessagesById("pollcurrent")).get(0);
-            volleyIntent = new Intent(context, PostService.class);
-            volleyIntent.putExtra("URL", gmURL);
-            volleyIntent.putExtra("NAME", "GMReceiver");
+            intentGM = new Intent(context, PostService.class);
+            intentGM.putExtra("URL", gmURL);
+            intentGM.putExtra("NAME", "GMReceiver");
             final JSONObject params = new JSONObject();
             try {
                 params.put("gid", message.getGid());
@@ -75,9 +76,9 @@ public class PollReceiver extends BroadcastReceiver {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            volleyIntent.putExtra("JSONOBJECT", params.toString());
-            volleyIntent.putExtra("ExtraContext", "Poll");
-            context.startService(volleyIntent);
+            intentGM.putExtra("JSONOBJECT", params.toString());
+            intentGM.putExtra("ExtraContext", "Poll");
+            context.startService(intentGM);
 
 
         }

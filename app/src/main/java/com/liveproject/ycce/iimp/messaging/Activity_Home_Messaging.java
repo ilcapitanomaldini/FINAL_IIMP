@@ -1,6 +1,31 @@
 package com.liveproject.ycce.iimp.messaging;
 
+/*COPYRIGHT NOTICE
+
+Copyright By "YCCE TEAM" on 15-03-2017.
+
+Members of "YCCE TEAM" are stated in the postscript.
+
+We, the creators of this software (i.e. developers) referenced as "YCCE TEAM" or "we" from here on,
+allow the person who gets this software and/or code for the software to present this software/code
+in a presentation dated 16-03-2017 only. Any further usage would be deemed to be breach of contract.
+ Accepting this software/code is legally binding and would mean that the terms stated here have been
+  accepted. The person does not have the right to copy/modify/distribute or in any form make the
+  software or code available to anyone without the explicit permission of all the members of
+   "YCCE TEAM". It is the responsibility of the aforementioned person that this software/code
+   does not get illegally distributed till the time the person is in possession of the software/code.
+
+P.S. :
+Members of "YCCE TEAM" :
+1. Aakash Wankhede
+2. Akash Kahalkar
+3. Mayur Dongare
+4. Ved Mehta*/
+
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -19,6 +44,8 @@ import android.widget.Toast;
 
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.R;
+import com.liveproject.ycce.iimp.events.EventHandlerService;
+import com.liveproject.ycce.iimp.networkservice.updateservice.DowndateService;
 import com.liveproject.ycce.iimp.news.NewsActivity;
 import com.liveproject.ycce.iimp.pendingrequests.PRActivity;
 
@@ -50,7 +77,17 @@ public class Activity_Home_Messaging extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //TODO : Put the following function in a proper context/place.
-        DatabaseService.updateLoginDateTime();
+        //Testing
+        DatabaseService.updateLoginDateTimeByYear(2000);
+        startService(new Intent(this, EventHandlerService.class));
+
+        if (isOnline(this))
+        {
+            //TODO : Add UpdateService as well.
+            Intent intent1 = new Intent(this,DowndateService.class);
+            this.startService(intent1);
+        }
+
 //        s_id = DatabaseService.fetchID();
         //      s_status = DatabaseService.fetchUserStatus(s_id);
       /*  getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -164,5 +201,13 @@ public class Activity_Home_Messaging extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public boolean isOnline(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        //should check null because in airplane mode it will be null
+        return (netInfo != null && netInfo.isConnected());
     }
 }

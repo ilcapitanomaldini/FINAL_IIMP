@@ -46,8 +46,8 @@ public class DowndateService extends IntentService {
             String date = DatabaseService.fetchLastLogin();
             date = date.substring(0,date.length()-1);
             date = date + ".000Z";
-            Log.d(TAG, "onHandleIntent: "+DatabaseService.fetchID());
-            Log.d(TAG, "onHandleIntent: "+ date);
+            //Log.d(TAG, "onHandleIntent: "+DatabaseService.fetchID());
+            //Log.d(TAG, "onHandleIntent: "+ date);
             params.put("lastdate", date);
         } catch (JSONException e) {
             e.printStackTrace();

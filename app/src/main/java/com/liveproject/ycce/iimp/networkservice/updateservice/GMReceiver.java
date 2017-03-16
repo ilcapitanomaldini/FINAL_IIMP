@@ -3,6 +3,7 @@ package com.liveproject.ycce.iimp.networkservice.updateservice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.messaging.groupmessaging.Message;
@@ -24,6 +25,7 @@ public class GMReceiver extends BroadcastReceiver {
                     DatabaseService.updateGMByID(currentMessage.getLocalID(),result.substring(1,result.length()-1));
                 }
                 else if(intent.getStringExtra("ExtraContext").equals("Poll")) {
+                    Log.d("GMReceiver", "onReceive: " + "Here I am!");
                     currentMessage = new ArrayList<Message>(DatabaseService.fetchMessagesById("pollcurrent")).get(0);
                     DatabaseService.updateGMByID(currentMessage.getLocalID(),result.substring(1,result.length()-1));
                 }
