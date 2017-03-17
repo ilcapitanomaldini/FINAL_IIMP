@@ -36,7 +36,7 @@ import com.liveproject.ycce.iimp.constants.Constants;
 import com.liveproject.ycce.iimp.messaging.Activity_Home_Messaging;
 import com.liveproject.ycce.iimp.networkservice.GetService;
 import com.liveproject.ycce.iimp.networkservice.PostService;
-import com.liveproject.ycce.iimp.viewholder.Header_SingleSelect_Handler;
+import com.liveproject.ycce.iimp.adapters.headers.Header_SingleSelect_Handler;
 import com.thoughtbot.expandablecheckrecyclerview.models.CheckedExpandableGroup;
 
 import org.json.JSONArray;

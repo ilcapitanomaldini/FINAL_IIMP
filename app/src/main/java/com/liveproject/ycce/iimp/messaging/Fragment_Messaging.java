@@ -1,7 +1,9 @@
 package com.liveproject.ycce.iimp.messaging;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.NullAdapter;
 import com.liveproject.ycce.iimp.R;
+import com.liveproject.ycce.iimp.creation.personalmessage.Activity_CreationPersonalMessage;
 import com.liveproject.ycce.iimp.messaging.personalmessaging.PersonalMessage;
 
 import java.util.ArrayList;
@@ -31,6 +34,7 @@ public class Fragment_Messaging extends Fragment {
 
     private RecyclerView rv;
     private LinearLayoutManager llm;
+    private FloatingActionButton fab_createpersonalmessage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,15 @@ public class Fragment_Messaging extends Fragment {
             rv.setAdapter(new NullAdapter(strings));
         }
         setRecyclerViewScrollListener();
+
+        fab_createpersonalmessage = (FloatingActionButton) getActivity().findViewById(R.id.fab_add_personalmessage);
+        fab_createpersonalmessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getBaseContext(), Activity_CreationPersonalMessage.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /*  @Override

@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 
 import com.liveproject.ycce.iimp.MemberPersonalInfo;
 import com.liveproject.ycce.iimp.R;
-import com.liveproject.ycce.iimp.viewholder.Header_Members;
-import com.liveproject.ycce.iimp.viewholder.child.ViewHolder_Child;
-import com.liveproject.ycce.iimp.viewholder.header.ViewHolder_Header;
+import com.liveproject.ycce.iimp.adapters.headers.Header_Members;
+import com.liveproject.ycce.iimp.adapters.viewholder.child.ViewHolder_Child;
+import com.liveproject.ycce.iimp.adapters.viewholder.header.ViewHolder_Header;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
@@ -18,9 +18,9 @@ import java.util.List;
  * Created by Tiger on 28-02-2017.
  */
 
-public class Adapter_Group_Members extends ExpandableRecyclerViewAdapter<ViewHolder_Header, ViewHolder_Child> {
+public class Adapter_List extends ExpandableRecyclerViewAdapter<ViewHolder_Header, ViewHolder_Child> {
 
-    public Adapter_Group_Members(List<? extends ExpandableGroup> groups) {
+    public Adapter_List(List<? extends ExpandableGroup> groups) {
         super(groups);
     }
 
@@ -41,13 +41,13 @@ public class Adapter_Group_Members extends ExpandableRecyclerViewAdapter<ViewHol
     @Override
     public void onBindChildViewHolder(ViewHolder_Child holder, int flatPosition,
                                       ExpandableGroup group, int childIndex) {
-        final MemberPersonalInfo artist = ((Header_Members) group).getItems().get(childIndex);
-        holder.setArtistName(artist.getFirstname() + " " + artist.getLastname());
+        final MemberPersonalInfo memberPersonalInfo = ((Header_Members) group).getItems().get(childIndex);
+        holder.setName(memberPersonalInfo.getFirstname() + " " + memberPersonalInfo.getLastname());
     }
 
     @Override
     public void onBindGroupViewHolder(ViewHolder_Header holder, int flatPosition,
                                       ExpandableGroup group) {
-        holder.setGenreTitle(group);
+        holder.setParentTitle(group);
     }
 }

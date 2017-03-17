@@ -141,10 +141,13 @@ public class Activity_GroupCreation extends AppCompatActivity {
             if (error != null) {
                 toast.makeText(getBaseContext(), "Please check your internet connection!!", Toast.LENGTH_LONG).show();
             } else if (response != null) {
+                toast.makeText(getBaseContext(),"Please check your internet connection!!",Toast.LENGTH_LONG).show();
+                /*
                 response = response.substring(1, response.length() - 1);
                 Intent intent1 = new Intent(getBaseContext(), Activity_DistributionList_CustomizedGroup.class);
                 intent1.putExtra("GID", response);
                 startActivity(intent1);
+                */
             }
         }
     }

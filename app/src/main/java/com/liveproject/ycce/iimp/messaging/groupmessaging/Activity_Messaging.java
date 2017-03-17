@@ -70,6 +70,7 @@ public class Activity_Messaging extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(),Activity_Group_Details.class);
                 intent.putExtra("GID", currentgid);
+                intent.putExtra("GNAME",groupname);
                 startActivity(intent);
             }
         });

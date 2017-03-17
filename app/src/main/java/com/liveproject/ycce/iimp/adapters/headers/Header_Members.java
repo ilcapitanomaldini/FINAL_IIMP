@@ -1,4 +1,4 @@
-package com.liveproject.ycce.iimp.viewholder;
+package com.liveproject.ycce.iimp.adapters.headers;
 
 import com.liveproject.ycce.iimp.MemberPersonalInfo;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;

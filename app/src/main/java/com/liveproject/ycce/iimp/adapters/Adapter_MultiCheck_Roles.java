@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 
 import com.liveproject.ycce.iimp.R;
 import com.liveproject.ycce.iimp.Roles;
-import com.liveproject.ycce.iimp.viewholder.Header_MultiCheck_Roles;
-import com.liveproject.ycce.iimp.viewholder.child.ViewHolder_MultiChild;
-import com.liveproject.ycce.iimp.viewholder.header.ViewHolder_Header;
+import com.liveproject.ycce.iimp.adapters.headers.Header_MultiCheck_Roles;
+import com.liveproject.ycce.iimp.adapters.viewholder.child.ViewHolder_MultiChild;
+import com.liveproject.ycce.iimp.adapters.viewholder.header.ViewHolder_Header;
 import com.thoughtbot.expandablecheckrecyclerview.CheckableChildRecyclerViewAdapter;
 import com.thoughtbot.expandablecheckrecyclerview.models.CheckedExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
@@ -35,8 +35,8 @@ public class Adapter_MultiCheck_Roles extends CheckableChildRecyclerViewAdapter<
     @Override
     public void onBindCheckChildViewHolder(ViewHolder_MultiChild holder, int position,
                                            CheckedExpandableGroup group, int childIndex) {
-        final Roles artist = (Roles) group.getItems().get(childIndex);
-        holder.setChildTitle(artist.getRolesName());
+        final Roles roles = (Roles) group.getItems().get(childIndex);
+        holder.setChildTitle(roles.getRolesName());
     }
 
     @Override
@@ -49,6 +49,6 @@ public class Adapter_MultiCheck_Roles extends CheckableChildRecyclerViewAdapter<
     @Override
     public void onBindGroupViewHolder(ViewHolder_Header holder, int flatPosition,
                                       ExpandableGroup group) {
-        holder.setGenreTitle(group);
+        holder.setParentTitle(group);
     }
 }

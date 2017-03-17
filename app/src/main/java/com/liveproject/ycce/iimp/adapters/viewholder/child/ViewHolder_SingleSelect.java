@@ -1,4 +1,4 @@
-package com.liveproject.ycce.iimp.viewholder.child;
+package com.liveproject.ycce.iimp.adapters.viewholder.child;
 
 import android.view.View;
 import android.widget.Checkable;

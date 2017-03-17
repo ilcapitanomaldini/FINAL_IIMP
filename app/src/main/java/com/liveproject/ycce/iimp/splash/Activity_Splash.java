@@ -59,21 +59,21 @@ public class Activity_Splash extends AppCompatActivity {
                         s_id = DatabaseService.fetchID();
                         s_status = DatabaseService.fetchUserStatus(s_id);
 
-                        if (!(Constants.USERSTATUS[0].equalsIgnoreCase(s_status)
+                        if ((Constants.USERSTATUS[0].equalsIgnoreCase(s_status)
                                 || Constants.USERSTATUS[2].equalsIgnoreCase(s_status))) {
-                            URL = Constants.SITE_URL + Constants.GETUSERSTATUS_URL + "?id=" + s_id;
+                            URL = Constants.SITE_URL + Constants.GETUSERSTATUS_URL + "?cid=" + s_id;
                             Intent intent = new Intent(getBaseContext(), GetService.class);
                             intent.putExtra("URL", URL);
                             intent.putExtra("NAME", "UserStatus");
                             getBaseContext().startService(intent);
+                        } else if (Constants.USERSTATUS[1].equalsIgnoreCase(s_status)) {
+                            Intent intent = new Intent(getBaseContext(), Activity_Home_Messaging.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
                         }
-                    } else if (Constants.USERSTATUS[1].equalsIgnoreCase(s_status)) {
-                        Intent intent = new Intent(getBaseContext(), Activity_Home_Messaging.class);
-                        intent.putExtra("Status", s_status);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();
-                    } else if (Constants.STATUS[3].equals(DatabaseService.fetchStatus())) {
+
+                    }else if (Constants.STATUS[3].equals(DatabaseService.fetchStatus())) {
                         Intent intent = new Intent(getBaseContext(), Activity_NewRegistration_Form1.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);

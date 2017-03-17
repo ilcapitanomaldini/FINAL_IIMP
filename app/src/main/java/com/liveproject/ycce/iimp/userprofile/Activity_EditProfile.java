@@ -19,7 +19,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -49,7 +48,7 @@ import com.liveproject.ycce.iimp.Validation;
 import com.liveproject.ycce.iimp.adapters.Adapter_MultiCheck_Roles;
 import com.liveproject.ycce.iimp.constants.Constants;
 import com.liveproject.ycce.iimp.constants.Key;
-import com.liveproject.ycce.iimp.viewholder.Header_MultiCheck_Roles;
+import com.liveproject.ycce.iimp.adapters.headers.Header_MultiCheck_Roles;
 import com.liveproject.ycce.iimp.volleyservice.VolleySingleton;
 
 import org.json.JSONArray;

@@ -242,4 +242,72 @@ public class JSONService {
         }
         return memberPersonalInfoList;
     }
+
+    public List<MemberPersonalInfo> parseListOfGroupMembers() {
+        List<MemberPersonalInfo> memberPersonalInfoList = new ArrayList<>();
+        try {
+            JSONArray jarray = new JSONArray(json);
+            for (int i = 0, j = 0; j < jarray.length() + 1; i++, j++) {
+                JSONObject jo = jarray.getJSONObject(j);
+
+                JSONObject member = jo.getJSONObject("Contact__Id__r");
+                memberPersonalInfoList.add(i,
+                        new MemberPersonalInfo(member.getString(Key.ID),
+                                member.getString(Key.FIRST_NAME),
+                                member.getString(Key.LAST_NAME),
+                                jo.getString("Role__c")));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return memberPersonalInfoList;
+    }
+
+    public List<GroupCondition> parseListOfGroupCondition() {
+        List<GroupCondition> groupConditionList = new ArrayList<>();
+        String designation = null, role = null, division = null, doj = null, dob = null, city = null, gender = null, doj_timing = null, dob_timing = null;
+        try {
+            JSONArray jarray = new JSONArray(json);
+            for (int i = 0, j = 0; j < jarray.length() + 1; i++, j++) {
+                JSONObject jo = jarray.getJSONObject(j);
+
+                if (jo.has("Designation__r")) {
+                    JSONObject jsonObject = jo.getJSONObject("Designation__r");
+                    designation = jsonObject.getString("Name");
+                }
+                if (jo.has("Role__r")) {
+                    JSONObject jsonObject = jo.getJSONObject("Role__r");
+                    division = jsonObject.getString("Name");
+                }
+                if (jo.has("Division__r")) {
+                    JSONObject jsonObject = jo.getJSONObject("Division__r");
+                    division = jsonObject.getString("Name");
+                }
+                if (jo.has("City__r")) {
+                    JSONObject jsonObject = jo.getJSONObject("City__r");
+                    city = jsonObject.getString("Name");
+                }
+                if (jo.has("Gender__c")) {
+                    gender = jo.getString("Gender__c");
+                }
+                if (jo.has("Birthdate__c")) {
+                    dob = jo.getString("Birthdate__c");
+                }
+                if (jo.has("BirthdateCriteria__c")) {
+                    dob_timing = jo.getString("BirthdateCriteria__c");
+                }
+                if (jo.has("JoiningDate__c")) {
+                    doj = jo.getString("JoiningDate__c");
+                }
+                if (jo.has("JoiningDateCriteria__c")) {
+                    doj_timing = jo.getString("JoinigDateCriteria__c");
+                }
+                groupConditionList.add(i,
+                        new GroupCondition(designation, role, division, city, gender, doj, dob, doj_timing, dob_timing));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return groupConditionList;
+    }
 }

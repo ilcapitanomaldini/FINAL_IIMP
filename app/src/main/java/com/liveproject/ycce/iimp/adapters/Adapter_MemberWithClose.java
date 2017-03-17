@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import com.liveproject.ycce.iimp.MemberPersonalInfo;
 import com.liveproject.ycce.iimp.R;
-import com.liveproject.ycce.iimp.viewholder.Header_Members;
-import com.liveproject.ycce.iimp.viewholder.header.ViewHolder_Header;
+import com.liveproject.ycce.iimp.adapters.headers.Header_Members;
+import com.liveproject.ycce.iimp.adapters.viewholder.header.ViewHolder_Header;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
@@ -47,17 +47,19 @@ public class Adapter_MemberWithClose extends ExpandableRecyclerViewAdapter<ViewH
     @Override
     public void onBindChildViewHolder(ViewHolder_MemberWithClose holder, int flatPosition,
                                       ExpandableGroup group, int childIndex) {
-        final MemberPersonalInfo artist = ((Header_Members) group).getItems().get(childIndex);
-        holder.setChildTitle(artist.getFirstname() + " " + artist.getLastname());
+        final MemberPersonalInfo memberPersonalInfo = ((Header_Members) group).getItems().get(childIndex);
+        holder.setChildTitle(memberPersonalInfo.getFirstname() + " " + memberPersonalInfo.getLastname());
     }
 
     @Override
     public void onBindGroupViewHolder(ViewHolder_Header holder, int flatPosition,
                                       ExpandableGroup group) {
-        holder.setGenreTitle(group);
+        holder.setParentTitle(group);
     }
 
     public void delete(int position){
+        if(position == 1)
+            position--;
         memberPersonalInfoList.remove(position);
         notifyItemRemoved(position);
     }

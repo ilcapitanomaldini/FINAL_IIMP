@@ -1,4 +1,4 @@
-package com.liveproject.ycce.iimp.viewholder;
+package com.liveproject.ycce.iimp.adapters.headers;
 
 import android.os.Parcel;
 

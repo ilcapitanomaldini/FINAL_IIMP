@@ -16,6 +16,7 @@ public class MemberPersonalInfo implements Parcelable {
     private String designation, division;
     private List<String> roles;
     private String handler_id, handler_firstname, handler_lastname, status;
+    private String g_role;
 
 
     public MemberPersonalInfo() {
@@ -34,6 +35,14 @@ public class MemberPersonalInfo implements Parcelable {
         this.handler_lastname = null;
         this.roles = new ArrayList<>();
         this.status = null;
+        this.g_role = null;
+    }
+
+    public MemberPersonalInfo(String id, String firstname, String lastname, String g_role){
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.g_role = g_role;
     }
 
     public MemberPersonalInfo(String id, String firstname, String lastname, String emailid, String mobileno, String gender, String dob, String doj, String designation, String division, String handler_id, String handler_firstname, String handler_lastname, List roles, String status) {
@@ -224,6 +233,14 @@ public class MemberPersonalInfo implements Parcelable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getG_role() {
+        return g_role;
+    }
+
+    public void setG_role(String g_role) {
+        this.g_role = g_role;
     }
 
     public static final Creator<MemberPersonalInfo> CREATOR = new Creator<MemberPersonalInfo>() {

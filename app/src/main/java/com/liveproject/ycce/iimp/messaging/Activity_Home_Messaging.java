@@ -46,6 +46,7 @@ import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.R;
 import com.liveproject.ycce.iimp.events.EventHandlerService;
 import com.liveproject.ycce.iimp.networkservice.updateservice.DowndateService;
+import com.liveproject.ycce.iimp.constants.Constants;
 import com.liveproject.ycce.iimp.news.NewsActivity;
 import com.liveproject.ycce.iimp.pendingrequests.PRActivity;
 
@@ -91,11 +92,17 @@ public class Activity_Home_Messaging extends AppCompatActivity
 //        s_id = DatabaseService.fetchID();
         //      s_status = DatabaseService.fetchUserStatus(s_id);
       /*  getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        DatabaseService.updateLoginDateTime();
+        s_id = DatabaseService.fetchID();
+        s_status = DatabaseService.fetchUserStatus(s_id);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
         if (Constants.USERSTATUS[2].equalsIgnoreCase(s_status)) {
             toast.makeText(getBaseContext(), "Your ID has been blocked. Please contact database server.", Toast.LENGTH_LONG).show();
+            finish();
         } else if (Constants.USERSTATUS[0].equalsIgnoreCase(s_status)) {
             toast.makeText(getBaseContext(), "Your request has not been approved let. Try again later.", Toast.LENGTH_LONG).show();
+            finish();
         } else {
 
     */        //toolbar = (Toolbar) findViewById(R.id.toolbar);
