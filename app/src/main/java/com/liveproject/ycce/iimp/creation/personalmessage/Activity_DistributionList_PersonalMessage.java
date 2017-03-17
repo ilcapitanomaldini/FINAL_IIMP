@@ -312,7 +312,7 @@ public class Activity_DistributionList_PersonalMessage extends AppCompatActivity
         }
 
         btn_search_member = (Button) findViewById(R.id.dlp_btn_search_members);
-
+        btn_search_member.setText("Search Recipent");
 
         btn_search_member.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -437,6 +437,7 @@ public class Activity_DistributionList_PersonalMessage extends AppCompatActivity
                     s_prev_role = s_role;
 
                     btn_add_members = (Button) findViewById(R.id.dlp_btn_add_members);
+                    btn_add_members.setText("Add Recipents");
 
                     btn_add_members.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -444,7 +445,7 @@ public class Activity_DistributionList_PersonalMessage extends AppCompatActivity
                             getSelectedMembers();
                             LinearLayout ll_group_member = (LinearLayout) findViewById(R.id.dlp_ll_group_member);
                             ll_group_member.setVisibility(View.VISIBLE);
-                            Header_Members header_members = new Header_Members("Selected Members", selectedMemberList);
+                            Header_Members header_members = new Header_Members("Selected Recipents", selectedMemberList);
                             List<Header_Members> headerSelectedMembers = Arrays.asList(header_members);
                             adapter_memberWithClose = new Adapter_MemberWithClose(headerSelectedMembers);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());

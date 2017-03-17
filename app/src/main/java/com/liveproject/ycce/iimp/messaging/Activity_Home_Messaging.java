@@ -82,16 +82,15 @@ public class Activity_Home_Messaging extends AppCompatActivity
         DatabaseService.updateLoginDateTimeByYear(2000);
         startService(new Intent(this, EventHandlerService.class));
 
-        if (isOnline(this))
-        {
+        if (isOnline(this)) {
             //TODO : Add UpdateService as well.
-            Intent intent1 = new Intent(this,DowndateService.class);
+            Intent intent1 = new Intent(this, DowndateService.class);
             this.startService(intent1);
         }
 
-//        s_id = DatabaseService.fetchID();
-        //      s_status = DatabaseService.fetchUserStatus(s_id);
-      /*  getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        s_id = DatabaseService.fetchID();
+        s_status = DatabaseService.fetchUserStatus(s_id);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         DatabaseService.updateLoginDateTime();
         s_id = DatabaseService.fetchID();
         s_status = DatabaseService.fetchUserStatus(s_id);
@@ -105,28 +104,28 @@ public class Activity_Home_Messaging extends AppCompatActivity
             finish();
         } else {
 
-    */        //toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+            //toolbar = (Toolbar) findViewById(R.id.toolbar);
+            //setSupportActionBar(toolbar);
 
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            setupViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+            tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(viewPager);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+        }
     }
-
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -187,16 +186,10 @@ public class Activity_Home_Messaging extends AppCompatActivity
         if (id == R.id.nav_messaging) {
             i = new Intent("com.liveproject.persi.ycce.iimp.HOME_MESSAGING");
             startActivity(i);
-        } else if (id == R.id.nav_my_groups) {
-
-            i = new Intent("com.liveproject.persi.ycce.iimp.MY_GROUPS");
-            startActivity(i);
-
         } else if (id == R.id.nav_news) {
             // DatabaseService.createnewstable();
             i = new Intent(this, NewsActivity.class);
             startActivity(i);
-
         } else if (id == R.id.nav_profile) {
             i = new Intent("com.liveproject.persi.ycce.iimp.USER_PROFILE");
             startActivity(i);
