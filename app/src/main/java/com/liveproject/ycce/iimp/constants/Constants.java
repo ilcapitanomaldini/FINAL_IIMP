@@ -54,4 +54,5 @@ public class Constants {
     public static final String PERSONALMESSAGE_URL = "personalmessage";
     public static final String PERSONALMESSAGERECEIVER_URL = "personalmessagereceiver";
     public static final String GETGROUPDETAILS_URL = "getgroupdetails";
+    public static final String ADDGROUPMEMBERS_URL = "addgroupmembers";
 }

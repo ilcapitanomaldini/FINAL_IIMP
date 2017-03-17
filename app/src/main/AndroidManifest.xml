@@ -183,6 +183,28 @@
                 android:value=".creation.groups.Activity_GroupCreation" />
         </activity>
 
+        <activity android:name=".creation.groups.customizedgroup.Activity_DistributionList_CustomizedGroup"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.DISTRIBUTIONLIST_CUSTOMIZED_GROUP" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".creation.groups.Activity_GroupCreation" />
+        </activity>
+
+        <activity android:name=".creation.groups.customizedgroup.Activity_RoleSelection"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.ROLESELECTION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".creation.groups.customizedgroup.Activity_DistributionList_CustomizedGroup" />
+        </activity>
+
         <activity
             android:name=".events.Activity_CreateEvent"
             android:screenOrientation="portrait">

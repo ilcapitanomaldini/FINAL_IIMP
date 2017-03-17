@@ -55,7 +55,7 @@
                     android:text="M" />
 
                 <RadioButton
-                    android:id="@+id/list_item_rg_normal"
+                    android:id="@+id/list_item_rb_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="4dp"

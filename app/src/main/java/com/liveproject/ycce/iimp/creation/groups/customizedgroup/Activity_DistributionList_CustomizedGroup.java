@@ -2,6 +2,10 @@ package com.liveproject.ycce.iimp.creation.groups.customizedgroup;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -22,11 +28,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.liveproject.ycce.iimp.CityService;
 import com.liveproject.ycce.iimp.DesignationService;
 import com.liveproject.ycce.iimp.Division;
@@ -41,19 +44,17 @@ import com.liveproject.ycce.iimp.adapters.Adapter_MultiCheck_Members;
 import com.liveproject.ycce.iimp.constants.Constants;
 import com.liveproject.ycce.iimp.adapters.headers.Header_Members;
 import com.liveproject.ycce.iimp.adapters.headers.Header_MultiCheck_Members;
+import com.liveproject.ycce.iimp.networkservice.PostService;
 import com.liveproject.ycce.iimp.volleyservice.VolleySingleton;
 import com.thoughtbot.expandablecheckrecyclerview.models.CheckedExpandableGroup;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Tiger on 15-02-2017.
@@ -61,13 +62,15 @@ import java.util.Map;
 
 public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity {
     Spinner spinner_designation, spinner_role, spinner_division, spinner_doj, spinner_dob, spinner_city, spinner_gender;
-    EditText et_doj, et_dob;
+    EditText et_firstname, et_lastname, et_mobileno, et_doj, et_dob;
     Button btn_add_members, btn_search_member;
     RecyclerView rv_selectedmembers, rv_addmembers;
     ProgressBar progressBar;
     Toast toast;
 
-    String s_designation, s_role, s_division, s_division_id, s_doj, s_dob, s_city, s_gender, s_doj_timing, s_dob_timing;
+    String s_firstname, s_lastname, s_mobileno, s_designation, s_role, s_division, s_division_id, s_doj, s_dob, s_city, s_gender, s_doj_timing, s_dob_timing;
+    String s_prev_firstname = null, s_prev_last_name = null, s_prev_mobileno = null, s_prev_designation = null, s_prev_role = null, s_prev_division_id = null, s_prev_doj = null, s_prev_dob = null, s_prev_city = null, s_prev_gender = null, s_prev_doj_timing = null, s_prev_dob_timing = null;
+    String s_gid;
     String URL;
     int activityloaded = 0;
 
@@ -80,29 +83,30 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
     ArrayList<String> cityArray = new ArrayList<>();
     List<Division> divisionList = new ArrayList<>();
     List<MemberPersonalInfo> memberPersonalInfoList = new ArrayList<>();
-    List<MemberPersonalInfo> selectedMemberList = new ArrayList<>();
+    ArrayList<MemberPersonalInfo> selectedMemberList = new ArrayList<>();
 
     private Adapter_MemberWithClose adapter_memberWithClose;
     private Adapter_MultiCheck_Members adapter_multiCheck_members;
+
+    BroadcastReceiver customizedgroupmembers;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_distribution_list_personal);
-        try {
-            Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
-            setSupportActionBar(toolbar);
-            TextView tv_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
-            tv_title.setText("Select Members");
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        } catch (NullPointerException e) {
-            Log.e("Toolbar", "onCreate: " + e.toString());
-        }
+
+        s_gid = getIntent().getStringExtra("GID");
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        TextView tv_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        tv_title.setText("Select Members");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         rv_addmembers = (RecyclerView) findViewById(R.id.dlp_rv_addmembers);
         rv_selectedmembers = (RecyclerView) findViewById(R.id.dlp_rv_selectedmember);
-        progressBar = (ProgressBar) findViewById(R.id.dlc_pb);
+        progressBar = (ProgressBar) findViewById(R.id.dlp_pb);
         progressBar.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
@@ -110,6 +114,10 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        et_firstname = (EditText) findViewById(R.id.dlp_et_firstname);
+        et_lastname = (EditText) findViewById(R.id.dlp_et_lastname);
+        et_mobileno = (EditText) findViewById(R.id.dlp_et_mobileno);
 
         { // HINTS : DISPLAY DESIGNATION.
             designationArray.add(0, "All");
@@ -135,16 +143,16 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
             VolleySingleton.getRequestQueue().add(designationRequest);
         }
         { // HINTS : DISPLAY CITIES.
-            cityArray.add(0, "Choose City");
+            cityArray.add(0, "All");
             spinner_city = (Spinner) findViewById(R.id.dlp_dd_city);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, cityArray);
-            spinner_designation.setAdapter(adapter);
+            spinner_city.setAdapter(adapter);
             CityService cityRequest = new CityService(
                     new Response.Listener<String>() {
                         @Override
@@ -164,14 +172,14 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
             VolleySingleton.getRequestQueue().add(cityRequest);
         }
 
         { // HINTS : DISPLAY DIVISIONS.
-            divisionArray.add(0, "Choose Division");
+            divisionArray.add(0, "All");
             spinner_division = (Spinner) findViewById(R.id.dlp_dd_division);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, divisionArray);
             spinner_division.setAdapter(adapter);
@@ -197,7 +205,7 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
             VolleySingleton.getRequestQueue().add(divisonRequest);
@@ -255,7 +263,7 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
             });
         }
         { // HINTS : DISPLAY ROLES.
-            roleArray.add(0, "Choose Role");
+            roleArray.add(0, "All");
             spinner_role = (Spinner) findViewById(R.id.dlp_dd_roles);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, roleArray);
             spinner_role.setAdapter(adapter);
@@ -278,7 +286,7 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
             VolleySingleton.getRequestQueue().add(roleRequest);
@@ -301,96 +309,136 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
         }
 
         btn_search_member = (Button) findViewById(R.id.dlp_btn_search_members);
+
         btn_search_member.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+                s_firstname = et_firstname.getText().toString();
+                s_lastname = et_lastname.getText().toString();
+                s_mobileno = et_mobileno.getText().toString();
                 s_doj = et_doj.getText().toString();
                 s_dob = et_dob.getText().toString();
 
-                LinearLayout ll_search_members = (LinearLayout) findViewById(R.id.dlp_ll_search_member);
-                ll_search_members.setVisibility(View.VISIBLE);
+                if (!Validation.isEmpty(s_doj) && s_doj_timing.equalsIgnoreCase("Null")) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    toast.makeText(getBaseContext(), "Select valid condition of Date of Joining.", Toast.LENGTH_SHORT).show();
+                } else if (!Validation.isEmpty(s_dob) && s_dob_timing.equalsIgnoreCase("Null")) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    toast.makeText(getBaseContext(), "Select valid condition of Date of Birth.", Toast.LENGTH_SHORT).show();
+                } else if (!(s_firstname.equalsIgnoreCase(s_prev_firstname) &&
+                        s_lastname.equalsIgnoreCase(s_prev_last_name) &&
+                        s_mobileno.equalsIgnoreCase(s_prev_mobileno) &&
+                        s_gender.equalsIgnoreCase(s_prev_gender) &&
+                        s_role.equalsIgnoreCase(s_prev_role) &&
+                        s_city.equalsIgnoreCase(s_prev_city) &&
+                        s_designation.equalsIgnoreCase(s_prev_designation) &&
+                        s_division_id.equalsIgnoreCase(s_prev_division_id) &&
+                        s_dob.equalsIgnoreCase(s_prev_dob) &&
+                        s_doj.equalsIgnoreCase(s_prev_doj) &&
+                        s_dob_timing.equalsIgnoreCase(s_prev_dob_timing) &&
+                        s_doj_timing.equalsIgnoreCase(s_prev_doj_timing))) {
 
-                final JSONObject params = new JSONObject();
-                try {
-                    params.put("gender", s_gender);
-                    params.put("dob", s_dob);
-                    params.put("doj", s_doj);
-                    params.put("designation", s_designation);
-                    params.put("division", s_division_id);
-                    params.put("role", s_role);
-                    params.put("city", s_city);
-                    params.put("dobcriteria", s_dob_timing);
-                    params.put("dojcriteria", s_doj_timing);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+                    if (Validation.isEmpty(s_dob)) {
+                        s_dob_timing = "";
+                    }
+                    if (Validation.isEmpty(s_doj)) {
+                        s_doj_timing = "";
+                    }
+
+                    final JSONObject params = new JSONObject();
+                    try {
+                        params.put("fname", s_firstname);
+                        params.put("lname", s_lastname);
+                        params.put("mobile", s_mobileno);
+                        params.put("gender", s_gender);
+                        params.put("dob", s_dob);
+                        params.put("doj", s_doj);
+                        params.put("designation", s_designation);
+                        params.put("divisionid", s_division_id);
+                        params.put("role", s_role);
+                        params.put("city", s_city);
+                        params.put("dobcriteria", s_dob_timing);
+                        params.put("dojcriteria", s_doj_timing);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("params", "onClick: " + params);
+                    URL = Constants.SITE_URL + Constants.SEARCH_MEMBERS_FOR_CUSTOMIZED_GROUP_URL;
+
+                    Intent intent = new Intent(getBaseContext(), PostService.class);
+                    intent.putExtra("URL", URL);
+                    intent.putExtra("NAME", "CustomizedGroupMembers");
+                    intent.putExtra("JSONOBJECT", params.toString());
+                    getBaseContext().startService(intent);
+
+                } else {
+                    activityloaded++;
+                    if (activityloaded >= 1) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        activityloaded = 0;
+                    }
+                    toast.makeText(getBaseContext(), "Same Conditions. No new members added.", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+    }
 
-                //Search member url
-                URL = Constants.SITE_URL + Constants.SEARCH_MEMBERS_FOR_CUSTOMIZED_GROUP_URL;
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, URL
-                        , new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+    private class CustomizedGroupMembers extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String response = intent.getStringExtra("Result");
+            String error = intent.getStringExtra("Error");
 
-                        if (Validation.isEmpty(response)) {
-                        } else {
-                            JSONService jsonService = new JSONService(response);
-                            memberPersonalInfoList = jsonService.parseListOfMembers();
-                            Header_MultiCheck_Members headerMembers1 = new Header_MultiCheck_Members("Select Members", memberPersonalInfoList);
-                            List<Header_MultiCheck_Members> headerMembers = Arrays.asList(headerMembers1);
+            progressBar.setVisibility(View.INVISIBLE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                            adapter_multiCheck_members = new Adapter_MultiCheck_Members(headerMembers);
-                            LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
-                            rv_addmembers.setLayoutManager(layoutManager);
-                            rv_addmembers.setAdapter(adapter_multiCheck_members);
-                            activityloaded++;
-                            if (activityloaded >= 1) {
-                                progressBar.setVisibility(View.INVISIBLE);
-                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                activityloaded = 0;
-                            }
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getBaseContext(), "Please check your internet connection!!!", Toast.LENGTH_SHORT).show();
-                    }
-                }) {
-                    @Override
-                    public byte[] getBody() throws AuthFailureError {
-                        try {
-                            return params.toString().getBytes("UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                            return null;
-                        }
-                    }
+            if (error != null) {
+                toast.makeText(getBaseContext(), "Please check your internet connection!!", Toast.LENGTH_LONG).show();
+            } else if (response != null) {
+                if (Validation.isEmpty(response)) {
+                    LinearLayout ll_search_members = (LinearLayout) findViewById(R.id.dlp_ll_search_member);
+                    ll_search_members.setVisibility(View.GONE);
+                    toast.makeText(getBaseContext(), "No Contact Found!!!", Toast.LENGTH_SHORT).show();
+                } else {
+                    LinearLayout ll_search_members = (LinearLayout) findViewById(R.id.dlp_ll_search_member);
+                    ll_search_members.setVisibility(View.VISIBLE);
+                    JSONService jsonService = new JSONService(response);
+                    memberPersonalInfoList = jsonService.parseListOfMembers();
+                    Header_MultiCheck_Members headerMembers1 = new Header_MultiCheck_Members("Select Members", memberPersonalInfoList);
+                    List<Header_MultiCheck_Members> headerMembers = Arrays.asList(headerMembers1);
 
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        HashMap<String, String> headers = new HashMap<String, String>();
-                        headers.put("Content-Type", "application/json");
-                        return headers;
-                    }
+                    adapter_multiCheck_members = new Adapter_MultiCheck_Members(headerMembers);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
+                    rv_addmembers.setLayoutManager(layoutManager);
+                    rv_addmembers.setAdapter(adapter_multiCheck_members);
 
-                    @Override
-                    public String getBodyContentType() {
-                        return "application/json";
-                    }
-                };
-                VolleySingleton.getRequestQueue().add(stringRequest);
+                    s_prev_firstname = s_firstname;
+                    s_prev_last_name = s_lastname;
+                    s_prev_mobileno = s_mobileno;
+                    s_prev_gender = s_gender;
+                    s_prev_city = s_city;
+                    s_prev_designation = s_designation;
+                    s_prev_division_id = s_division_id;
+                    s_prev_dob = s_dob;
+                    s_prev_doj = s_doj;
+                    s_prev_dob_timing = s_dob_timing;
+                    s_prev_doj_timing = s_doj_timing;
+                    s_prev_role = s_role;
 
-                btn_add_members = (Button) findViewById(R.id.dlp_btn_add_members);
-                getSelectedMembers();
-                if (selectedMemberList.size() > 0) {
-                    btn_add_members.setVisibility(View.VISIBLE);
+                    btn_add_members = (Button) findViewById(R.id.dlp_btn_add_members);
+
                     btn_add_members.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            getSelectedMembers();
                             LinearLayout ll_group_member = (LinearLayout) findViewById(R.id.dlp_ll_group_member);
                             ll_group_member.setVisibility(View.VISIBLE);
                             Header_Members header_members = new Header_Members("Selected Members", selectedMemberList);
@@ -409,12 +457,12 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
                     });
                 }
             }
-        });
+        }
     }
-
 
     // HINTS : DISPLAY DIVISION IN SPINNER.
     private void showDivision() {
+        divisionArray.add(0, "All");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, divisionArray);
         spinner_division.setAdapter(adapter);
         spinner_division.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -422,7 +470,10 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 TextView division = (TextView) view;
                 s_division = division.getText().toString();
-                s_division_id = divisionList.get(position).getId();
+                if (s_division == "All") {
+                    s_division_id = "All";
+                } else
+                    s_division_id = divisionList.get(position).getId();
             }
 
             @Override
@@ -433,9 +484,10 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
 
     // HINTS : DISPLAY CITIES IN SPINNER.
     private void showCity() {
+        cityArray.add(0, "All");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, cityArray);
-        spinner_role.setAdapter(adapter);
-        spinner_role.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner_city.setAdapter(adapter);
+        spinner_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 TextView city = (TextView) view;
@@ -450,6 +502,7 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
 
     // HINTS : DISPLAY ROLES IN SPINNER.
     private void showRole() {
+        roleArray.add(0, "All");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, roleArray);
         spinner_role.setAdapter(adapter);
         spinner_role.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -468,6 +521,7 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
 
     // HINTS : DISPLAY DESIGNATION IN SPINNER.
     private void showDesignation() {
+        designationArray.add(0, "All");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, designationArray);
         spinner_designation.setAdapter(adapter);
         spinner_designation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -502,7 +556,6 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
         }
     }
 
-
     @Override
     @SuppressWarnings("deprecation")
     protected Dialog onCreateDialog(int id) {
@@ -529,4 +582,46 @@ public class Activity_DistributionList_CustomizedGroup extends AppCompatActivity
             et_doj.setText((arg2 + 1) + "/" + arg3 + "/" + arg1);
         }
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        customizedgroupmembers = new Activity_DistributionList_CustomizedGroup.CustomizedGroupMembers();
+        this.registerReceiver(customizedgroupmembers, new IntentFilter("android.intent.action.CustomizedGroupMembers"));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.unregisterReceiver(customizedgroupmembers);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.next_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.next) {
+            if(selectedMemberList.size()>0) {
+                Intent intent = new Intent(getBaseContext(), Activity_RoleSelection.class);
+                intent.putExtra("GID", s_gid);
+                intent.putParcelableArrayListExtra("SELECTED_MEMBERS",selectedMemberList);
+                startActivity(intent);
+            }
+            else{
+                toast.makeText(getBaseContext(),"Please select members.",Toast.LENGTH_LONG).show();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
