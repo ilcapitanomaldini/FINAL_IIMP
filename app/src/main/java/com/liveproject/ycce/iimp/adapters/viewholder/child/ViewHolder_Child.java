@@ -1,4 +1,4 @@
-package com.liveproject.ycce.iimp.viewholder.child;
+package com.liveproject.ycce.iimp.adapters.viewholder.child;
 
 import android.view.View;
 import android.widget.TextView;
@@ -19,7 +19,7 @@ public class ViewHolder_Child extends ChildViewHolder {
         childTextView = (TextView) itemView.findViewById(R.id.list_item_child_name);
     }
 
-    public void setArtistName(String name) {
+    public void setName(String name) {
         childTextView.setText(name);
     }
 }

@@ -150,7 +150,6 @@ public class Activity_OTP_Verification extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "Invalid OTP", Toast.LENGTH_SHORT).show();
                 }
             }
-
         }
     }
 
@@ -167,11 +166,20 @@ public class Activity_OTP_Verification extends AppCompatActivity {
                 Member member = jsonService.parseSearchByID();
                 if (DatabaseService.insertUserProfile(member) &&
                         DatabaseService.insertRoles(member.getMpi().getRoles(), member.getMpi().getId())) {
-                   Intent i = new Intent(getBaseContext(), Activity_Home_Messaging.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i);
-                    finish();
-                    toast.makeText(getBaseContext(), "Successful", Toast.LENGTH_SHORT).show();
+
+                    if(member.getMemberPersonalInfo().getStatus().equalsIgnoreCase(Constants.USERSTATUS[1])){
+                        Intent i = new Intent(getBaseContext(), Activity_Home_Messaging.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
+                        finish();
+                        toast.makeText(getBaseContext(), "Successful", Toast.LENGTH_SHORT).show();
+                    }else if(member.getMemberPersonalInfo().getStatus().equalsIgnoreCase(Constants.USERSTATUS[0])){
+                        toast.makeText(getBaseContext(),"Waiting for your handler to accept the request.",Toast.LENGTH_LONG).show();
+                        finish();
+                    }else if(member.getMemberPersonalInfo().getStatus().equalsIgnoreCase(Constants.USERSTATUS[2])){
+                        toast.makeText(getBaseContext(),"Your status is blocked.",Toast.LENGTH_LONG).show();
+                        finish();
+                    }
                 }
             }
         }

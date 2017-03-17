@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 
 import com.liveproject.ycce.iimp.MemberPersonalInfo;
 import com.liveproject.ycce.iimp.R;
-import com.liveproject.ycce.iimp.viewholder.Header_SingleSelect_Handler;
-import com.liveproject.ycce.iimp.viewholder.child.ViewHolder_SingleSelect;
-import com.liveproject.ycce.iimp.viewholder.header.ViewHolder_Header;
+import com.liveproject.ycce.iimp.adapters.headers.Header_SingleSelect_Handler;
+import com.liveproject.ycce.iimp.adapters.viewholder.child.ViewHolder_SingleSelect;
+import com.liveproject.ycce.iimp.adapters.viewholder.header.ViewHolder_Header;
 import com.thoughtbot.expandablecheckrecyclerview.CheckableChildRecyclerViewAdapter;
 import com.thoughtbot.expandablecheckrecyclerview.models.CheckedExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
@@ -36,8 +36,8 @@ public class Adapter_SingleSelect_Handler extends
     @Override
     public void onBindCheckChildViewHolder(ViewHolder_SingleSelect holder, int position,
                                            CheckedExpandableGroup group, int childIndex) {
-        final MemberPersonalInfo artist = (MemberPersonalInfo) group.getItems().get(childIndex);
-        holder.setChildTitle(artist.getFirstname() + " " + artist.getLastname());
+        final MemberPersonalInfo memberPersonalInfo = (MemberPersonalInfo) group.getItems().get(childIndex);
+        holder.setChildTitle(memberPersonalInfo.getFirstname() + " " + memberPersonalInfo.getLastname());
     }
 
     @Override
@@ -50,6 +50,6 @@ public class Adapter_SingleSelect_Handler extends
     @Override
     public void onBindGroupViewHolder(ViewHolder_Header holder, int flatPosition,
                                       ExpandableGroup group) {
-        holder.setGenreTitle(group);
+        holder.setParentTitle(group);
     }
 }

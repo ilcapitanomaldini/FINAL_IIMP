@@ -41,7 +41,7 @@ import com.liveproject.ycce.iimp.Roles;
 import com.liveproject.ycce.iimp.Validation;
 import com.liveproject.ycce.iimp.adapters.Adapter_MultiCheck_Roles;
 import com.liveproject.ycce.iimp.constants.Constants;
-import com.liveproject.ycce.iimp.viewholder.Header_MultiCheck_Roles;
+import com.liveproject.ycce.iimp.adapters.headers.Header_MultiCheck_Roles;
 import com.liveproject.ycce.iimp.volleyservice.VolleySingleton;
 import com.thoughtbot.expandablecheckrecyclerview.models.CheckedExpandableGroup;
 

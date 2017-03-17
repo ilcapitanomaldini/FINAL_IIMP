@@ -39,8 +39,8 @@ import com.liveproject.ycce.iimp.Validation;
 import com.liveproject.ycce.iimp.adapters.Adapter_MemberWithClose;
 import com.liveproject.ycce.iimp.adapters.Adapter_MultiCheck_Members;
 import com.liveproject.ycce.iimp.constants.Constants;
-import com.liveproject.ycce.iimp.viewholder.Header_Members;
-import com.liveproject.ycce.iimp.viewholder.Header_MultiCheck_Members;
+import com.liveproject.ycce.iimp.adapters.headers.Header_Members;
+import com.liveproject.ycce.iimp.adapters.headers.Header_MultiCheck_Members;
 import com.liveproject.ycce.iimp.volleyservice.VolleySingleton;
 import com.thoughtbot.expandablecheckrecyclerview.models.CheckedExpandableGroup;
 

@@ -234,6 +234,26 @@
         </activity>
 
         <activity
+            android:name=".creation.personalmessage.Activity_CreationPersonalMessage"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.PM_CREATION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".creation.personalmessage.Activity_DistributionList_PersonalMessage"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.liveproject.persi.ycce.iimp.PM_CREATION_DL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".messaging.groupmessaging.Activity_Group_Details"
             android:screenOrientation="portrait">
             <intent-filter>

@@ -269,7 +269,6 @@ public class Activity_UserProfile extends AppCompatActivity {
             if (error != null) {
                 toast.makeText(getBaseContext(), "Please check your internet connection!!", Toast.LENGTH_LONG).show();
             } else if (response != null) {
-                Log.d("RESPONSE", "onReceive: " + response);
                 if (response.equalsIgnoreCase("\"true\"")) {
                     Intent intent1 = new Intent(getBaseContext(), PRActivity.class);
                     toast.makeText(getBaseContext(), "Request Rejected!!", Toast.LENGTH_SHORT).show();

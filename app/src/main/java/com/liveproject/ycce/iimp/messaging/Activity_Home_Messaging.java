@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.R;
+import com.liveproject.ycce.iimp.constants.Constants;
 import com.liveproject.ycce.iimp.news.NewsActivity;
 import com.liveproject.ycce.iimp.pendingrequests.PRActivity;
 
@@ -51,36 +52,39 @@ public class Activity_Home_Messaging extends AppCompatActivity
         setSupportActionBar(toolbar);
         //TODO : Put the following function in a proper context/place.
         DatabaseService.updateLoginDateTime();
-//        s_id = DatabaseService.fetchID();
-        //      s_status = DatabaseService.fetchUserStatus(s_id);
-      /*  getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        s_id = DatabaseService.fetchID();
+        s_status = DatabaseService.fetchUserStatus(s_id);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
         if (Constants.USERSTATUS[2].equalsIgnoreCase(s_status)) {
             toast.makeText(getBaseContext(), "Your ID has been blocked. Please contact database server.", Toast.LENGTH_LONG).show();
+            finish();
         } else if (Constants.USERSTATUS[0].equalsIgnoreCase(s_status)) {
             toast.makeText(getBaseContext(), "Your request has not been approved let. Try again later.", Toast.LENGTH_LONG).show();
+            finish();
         } else {
 
-    */        //toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+            //toolbar = (Toolbar) findViewById(R.id.toolbar);
+            //setSupportActionBar(toolbar);
 
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            setupViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+            tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(viewPager);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+        }
     }
 
 

@@ -1,4 +1,4 @@
-package com.liveproject.ycce.iimp.viewholder.header;
+package com.liveproject.ycce.iimp.adapters.viewholder.header;
 
 import android.view.View;
 import android.view.animation.RotateAnimation;
@@ -17,18 +17,17 @@ import static android.view.animation.Animation.RELATIVE_TO_SELF;
 
 public class ViewHolder_Header extends GroupViewHolder {
 
-    private TextView genreName;
+    private TextView Name;
     private ImageView arrow;
-    private ImageView icon;
 
     public ViewHolder_Header(View itemView) {
         super(itemView);
-        genreName = (TextView) itemView.findViewById(R.id.list_item_header_name);
+        Name = (TextView) itemView.findViewById(R.id.list_item_header_name);
         arrow = (ImageView) itemView.findViewById(R.id.list_item_header_arrow);
     }
 
-    public void setGenreTitle(ExpandableGroup genre) {
-            genreName.setText(genre.getTitle());
+    public void setParentTitle(ExpandableGroup parent) {
+            Name.setText(parent.getTitle());
     }
 
     @Override
