@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -290,5 +291,14 @@ public class Activity_Group_Details extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         adapter_groupCondition.onRestoreInstanceState(savedInstanceState);
         adapter_groupMember.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+        return true;
     }
 }

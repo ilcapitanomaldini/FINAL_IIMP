@@ -76,7 +76,7 @@ public class Activity_Validate_NewRegistration extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.done_menu, menu);
+        getMenuInflater().inflate(R.menu.next_menu, menu);
         return true;
     }
 
@@ -88,8 +88,11 @@ public class Activity_Validate_NewRegistration extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.done) {
+        if (id == R.id.next) {
             validateMobileno();
+        }
+        if(id == android.R.id.home){
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

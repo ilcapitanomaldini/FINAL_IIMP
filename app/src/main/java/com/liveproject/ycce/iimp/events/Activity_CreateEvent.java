@@ -3,9 +3,12 @@ package com.liveproject.ycce.iimp.events;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.LocalIdGen;
@@ -24,6 +27,13 @@ public class Activity_CreateEvent extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        TextView tv_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        tv_title.setText("Create Event");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         if(getIntent().getStringExtra("gid")!=null){
             gid = getIntent().getStringExtra("gid");
@@ -64,5 +74,14 @@ public class Activity_CreateEvent extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+        return true;
     }
 }

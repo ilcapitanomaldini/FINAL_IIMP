@@ -1,24 +1,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
     android:id="@+id/ll_cpoll_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:theme="@android:style/Theme.Holo.Dialog">
 
+    <include layout="@layout/app_bar" />
+
     <TextView
+        android:id="@+id/tv_pollr_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textAllCaps="true"
-        android:text="@string/poll_results"
-        android:id="@+id/tv_pollr_title"
         android:layout_gravity="center_horizontal"
-        android:padding="@dimen/text_size"/>
-   <com.github.mikephil.charting.charts.PieChart android:layout_height="match_parent"
-       android:layout_width="match_parent"
-       android:id="@+id/pie_poll"
-       android:layout_gravity="center_horizontal"
-       android:padding="@dimen/text_padding">
+        android:padding="@dimen/text_size"
+        android:text="@string/poll_results"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-   </com.github.mikephil.charting.charts.PieChart>
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pie_poll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/text_padding">
+
+    </com.github.mikephil.charting.charts.PieChart>
 </LinearLayout>

@@ -1,94 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_bar" />
 
     <TextView
+        android:id="@+id/tv_cevent_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textAllCaps="true"
-        android:text="@string/create_event"
-        android:id="@+id/tv_cevent_title"
         android:layout_gravity="center_horizontal"
-        android:padding="@dimen/text_size"/>
+        android:padding="@dimen/text_size"
+        android:text="@string/create_event"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date/Time"
             android:id="@+id/tv_cevent_date"
-            android:textSize="@dimen/text_size"
-            android:padding="@dimen/text_padding"/>
-        <EditText
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/text_padding"
+            android:text="Date/Time"
+            android:textSize="@dimen/text_size" />
+
+        <EditText
             android:id="@+id/et_cevent_date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:hint="yyyy-MM-ddThh:mm:ssZ"
-            android:textSize="@dimen/text_size"/>
+            android:textSize="@dimen/text_size" />
     </LinearLayout>
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Message"
             android:id="@+id/tv_cevent_message"
-            android:textSize="@dimen/text_size"
-            android:padding="@dimen/text_padding"/>
-        <EditText
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/text_padding"
+            android:text="Message"
+            android:textSize="@dimen/text_size" />
+
+        <EditText
             android:id="@+id/et_cevent_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:hint="Message Body"
             android:inputType="textMultiLine"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbars="vertical"
-            android:textSize="@dimen/text_size"/>
+            android:textSize="@dimen/text_size" />
     </LinearLayout>
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Duration"
             android:id="@+id/tv_cevent_duration"
-            android:textSize="@dimen/text_size"
-            android:padding="@dimen/text_padding"/>
-        <EditText
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/text_padding"
+            android:text="Duration"
+            android:textSize="@dimen/text_size" />
+
+        <EditText
             android:id="@+id/et_cevent_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:hint="Date/Time format"
             android:inputType="textMultiLine"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbars="vertical"
-            android:textSize="@dimen/text_size"/>
+            android:textSize="@dimen/text_size" />
     </LinearLayout>
 
 
     <Button
+        android:id="@+id/bt_cevent_create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textAllCaps="true"
-        android:text="Create"
-        android:id="@+id/bt_cevent_create"
         android:layout_gravity="center_horizontal"
+        android:background="@android:color/holo_orange_light"
         android:padding="@dimen/text_size"
-        android:background="@android:color/holo_orange_light"/>
+        android:text="Create"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

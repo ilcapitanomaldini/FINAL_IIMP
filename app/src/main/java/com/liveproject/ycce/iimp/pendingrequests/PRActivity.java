@@ -34,6 +34,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.liveproject.ycce.iimp.DatabaseService;
@@ -143,6 +144,15 @@ public class PRActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         this.unregisterReceiver(pendingRequestReceiver);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+        return true;
     }
 
     public class PendingRequestReceiver extends BroadcastReceiver {

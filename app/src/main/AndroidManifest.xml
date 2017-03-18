@@ -56,9 +56,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".login.Activity_FrontLogin" />
         </activity>
 
         <activity
@@ -89,9 +86,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".login.newregistration.Activity_NewRegistration_Form1" />
         </activity>
 
         <activity
@@ -113,9 +107,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".messaging.Activity_Home_Messaging" />
         </activity>
 
         <activity
@@ -126,9 +117,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".userprofile.Activity_UserProfile" />
         </activity>
 
         <activity android:name=".filemanager.Activity_File"
@@ -171,8 +159,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".messaging.Activity_Home_Messaging" />
         </activity>
 
         <activity android:name=".creation.groups.Activity_GroupCreation"
@@ -182,8 +168,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".messaging.Activity_Home_Messaging" />
         </activity>
 
         <activity android:name=".creation.groups.conditionalgroup.Activity_DistributionList_ConditionalGroup"
@@ -193,8 +177,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".creation.groups.Activity_GroupCreation" />
         </activity>
 
         <activity android:name=".creation.groups.customizedgroup.Activity_DistributionList_CustomizedGroup"
@@ -204,8 +186,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".creation.groups.Activity_GroupCreation" />
         </activity>
 
         <activity android:name=".creation.groups.customizedgroup.Activity_RoleSelection"
@@ -215,8 +195,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".creation.groups.customizedgroup.Activity_DistributionList_CustomizedGroup" />
         </activity>
 
         <activity

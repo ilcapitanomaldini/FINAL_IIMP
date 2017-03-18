@@ -51,6 +51,7 @@
                 <EditText
                     android:id="@+id/gc_et_groupdescription"
                     android:layout_width="match_parent"
+                    android:gravity="top|start"
                     android:layout_height="150dp"
                     android:textAlignment="viewStart" />
             </LinearLayout>

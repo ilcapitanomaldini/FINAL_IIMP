@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -42,10 +43,10 @@ public class Activity_Messaging extends AppCompatActivity {
     BroadcastReceiver receiver;
 
     private Toolbar toolbar;
-    private FloatingActionButton fab_events,fab_poll;
+    private FloatingActionButton fab_events,fab_poll, fab_send;
     private RecyclerView rv;
     private LinearLayoutManager llm;
-    private ImageButton send; private EditText sender;
+    private EditText sender;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +76,7 @@ public class Activity_Messaging extends AppCompatActivity {
             }
         });
 
-        send = (ImageButton) findViewById(R.id.bt_send);
+        fab_send = (FloatingActionButton) findViewById(R.id.fab_send);
         sender = (EditText) findViewById(R.id.et_message);
         fab_events = (FloatingActionButton) findViewById(R.id.fab_event);
         fab_poll = (FloatingActionButton) findViewById(R.id.fab_poll);
@@ -100,7 +101,7 @@ public class Activity_Messaging extends AppCompatActivity {
                 }
             });
 
-            send.setOnClickListener(new View.OnClickListener() {
+            fab_send.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -286,5 +287,14 @@ public class Activity_Messaging extends AppCompatActivity {
             Intent intent1 = new Intent(this,UpdateService.class);
             this.startService(intent1);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+        return true;
     }
 }
