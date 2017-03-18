@@ -4,6 +4,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -27,7 +30,16 @@ public class Activity_PollResults extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_poll_results);
-       String[] result = getIntent().getStringArrayExtra("Result");
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        TextView tv_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        tv_title.setText("Poll Result");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
+        String[] result = getIntent().getStringArrayExtra("Result");
         float[] rvalue = getIntent().getFloatArrayExtra("ResultValue");
         //ArrayList<PollMapping> pollMappingArray = getIntent().getSerializableExtra("PollMapping");
         String Title = getIntent().getStringExtra("Title");
@@ -36,15 +48,13 @@ public class Activity_PollResults extends AppCompatActivity {
         List<PieEntry> entries = new ArrayList<>();
 
 
-
-      //  entries.add(new PieEntry(18.5f, "Green"));
-    //    entries.add(new PieEntry(26.7f, "Yellow"));
-  //      entries.add(new PieEntry(24.0f, "Red"));
+        //  entries.add(new PieEntry(18.5f, "Green"));
+        //    entries.add(new PieEntry(26.7f, "Yellow"));
+        //      entries.add(new PieEntry(24.0f, "Red"));
 //        entries.add(new PieEntry(30.8f, "Blue"));
         int i = 0;
-        for(String element : result)
-        {
-            entries.add(new PieEntry(rvalue[i],element));
+        for (String element : result) {
+            entries.add(new PieEntry(rvalue[i], element));
             i++;
         }
 
@@ -70,7 +80,16 @@ public class Activity_PollResults extends AppCompatActivity {
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         legend.setTextSize(16);
-       // pieChart.invalidate(); // refresh
+        // pieChart.invalidate(); // refresh
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+        return true;
     }
 }

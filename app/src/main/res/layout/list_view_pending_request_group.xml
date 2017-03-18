@@ -1,39 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#fdd006">
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_marginTop="5dp"
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/iv_pr_group"
-            android:maxHeight="@dimen/cardview_default_radius"
-            android:maxWidth="@dimen/cardview_default_elevation"
-            android:src="@drawable/ic_menu_slideshow"
-            android:padding="@dimen/fab_margin"/>
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_supervisor_account_24dp" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/tv_pr_group_name"
-                android:textColor="#d10426"/>
-
-
-
+        <TextView
+            android:id="@+id/tv_pr_group_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="New Text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#212121" />
     </LinearLayout>
 </LinearLayout>

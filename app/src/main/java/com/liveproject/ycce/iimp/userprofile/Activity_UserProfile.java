@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -182,6 +183,15 @@ public class Activity_UserProfile extends AppCompatActivity {
         this.unregisterReceiver(pendingrequestrejected);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+        return true;
+    }
+
     private class UserProfile extends BroadcastReceiver {
 
         @Override
@@ -203,7 +213,7 @@ public class Activity_UserProfile extends AppCompatActivity {
                 MemberAddress memberAddress = new MemberAddress(member.getMemaddr());
                 CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.up_ctl);
                 collapsingToolbarLayout.setTitle(memberPersonalInfo.getFirstname() + " " + memberPersonalInfo.getLastname());
-                collapsingToolbarLayout.setCollapsedTitleGravity(View.TEXT_ALIGNMENT_GRAVITY);
+                collapsingToolbarLayout.setCollapsedTitleGravity(View.TEXT_ALIGNMENT_CENTER);
 
                 tv_designation.setText(memberPersonalInfo.getDesignation());
                 tv_mobile.setText(memberPersonalInfo.getMobileno());

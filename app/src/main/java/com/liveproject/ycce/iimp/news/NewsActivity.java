@@ -5,6 +5,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.NullAdapter;
@@ -27,6 +31,17 @@ public class NewsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
+
+        try {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+            setSupportActionBar(toolbar);
+            TextView tv_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
+            tv_title.setText("News");
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            Log.e("Toolbar", "onCreate: " + e.toString());
+        }
 
         rv = (RecyclerView) findViewById(R.id.rv_news);
         llm = new LinearLayoutManager(this);
@@ -85,6 +100,15 @@ public class NewsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+        return true;
     }
 
 }

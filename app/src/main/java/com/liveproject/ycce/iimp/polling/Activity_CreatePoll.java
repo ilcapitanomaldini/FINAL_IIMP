@@ -3,6 +3,9 @@ package com.liveproject.ycce.iimp.polling;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +39,17 @@ public class Activity_CreatePoll extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_poll);
+
+        try {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+            setSupportActionBar(toolbar);
+            TextView tv_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
+            tv_title.setText("Create Poll");
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            Log.e("Toolbar", "onCreate: " + e.toString());
+        }
         llm = (LinearLayout) findViewById(R.id.ll_cpoll_main);
         Title = (EditText) findViewById(R.id.et_cpoll_title_name);
         Number = (EditText) findViewById(R.id.et_cpoll_num_ans);
@@ -72,7 +86,7 @@ public class Activity_CreatePoll extends AppCompatActivity {
                         editText = new EditText(Activity_CreatePoll.this);
                         editText.setTextSize(16);
                         editText.setId(i + 1);
-                        editText.setTag(Integer.toString(i+1));
+                        editText.setTag(Integer.toString(i + 1));
                         editTexts.add(editText);
                         ll.addView(textView, 0);
                         ll.addView(editText, 1);
@@ -140,5 +154,14 @@ public class Activity_CreatePoll extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+        return true;
     }
 }

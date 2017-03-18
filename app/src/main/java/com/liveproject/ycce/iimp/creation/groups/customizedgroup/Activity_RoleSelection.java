@@ -84,6 +84,10 @@ public class Activity_RoleSelection extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if(id == android.R.id.home){
+            finish();
+        }
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.done) {
             selectedRoles = adapter_roleSelection.getSelectedRoles();

@@ -24,6 +24,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="5dp"
             android:id="@+id/ll_text_sender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,8 +32,26 @@
             android:background="#91f1f1f1"
             android:gravity="center|bottom"
             android:orientation="horizontal"
-            android:paddingBottom="2dp">
+            android:paddingBottom="2dp"
+            android:layout_marginBottom="5dp">
 
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_event"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_event_white_24dp" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_poll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_account_balance_24dp" />
 
             <EditText
                 android:id="@+id/et_message"
@@ -43,41 +62,14 @@
                 android:gravity="bottom"
                 android:maxHeight="80dp" />
 
-            <ImageButton
-                android:id="@+id/bt_send"
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@drawable/send"
-                android:text="d" />
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_send_24dp" />
         </LinearLayout>
     </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_event"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="71dp"
-            android:layout_marginEnd="9dp"
-            android:layout_marginLeft="@dimen/fab_margin"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:src="@drawable/ic_event_white_24dp" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_poll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/fab_event"
-            android:layout_marginEnd="22dp"
-            android:layout_marginLeft="@dimen/fab_margin"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:layout_toStartOf="@+id/fab_event"
-            android:src="@drawable/ic_account_balance_24dp" />
-    </RelativeLayout>
 </FrameLayout>
