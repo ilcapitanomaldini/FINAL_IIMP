@@ -47,7 +47,7 @@ public class Activity_File extends FragmentActivity {
             public void run() {
                 //
             }
-        }, 10000);
+        }, 100000);
 
 
         setContentView(R.layout.activity_file);

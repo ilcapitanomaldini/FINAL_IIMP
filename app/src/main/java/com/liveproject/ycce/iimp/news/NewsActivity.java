@@ -1,10 +1,13 @@
 package com.liveproject.ycce.iimp.news;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.NullAdapter;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 public class NewsActivity extends AppCompatActivity {
     private NewsRAdapter adapter;
     private ArrayList<News> messagelist;
+    private FloatingActionButton actionButton;
 
 
     private RecyclerView rv;
@@ -27,7 +31,14 @@ public class NewsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
-
+        actionButton = (FloatingActionButton) findViewById(R.id.fab_create_news);
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(),Activity_CreateNews.class);
+                startActivityForResult(intent,1);
+            }
+        });
         rv = (RecyclerView) findViewById(R.id.rv_news);
         llm = new LinearLayoutManager(this);
 
@@ -87,4 +98,13 @@ public class NewsActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1)
+        {
+            messagelist = DatabaseService.fetchNews();
+            rv.invalidate();
+        }
+    }
 }

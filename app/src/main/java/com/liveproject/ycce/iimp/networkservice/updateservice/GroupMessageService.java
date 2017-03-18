@@ -33,7 +33,7 @@ import java.util.ArrayList;
 public class GroupMessageService extends Service {
     final String TAG = "GroupMessageService";
     private String currentgid;
-    final private String getPollAM = "https://ycc-developer-edition.ap2.force.com/member/services/apexrest//getpollresult";
+    final private String getPollAM = "https://ycc-developer-edition.ap2.force.com/member/services/apexrest/getpollresult";
     final private String groupmessagesURL = "https://ycc-developer-edition.ap2.force.com/member/services/apexrest/getmygroupmessage";
     BroadcastReceiver receiver,pamreceiver;
     @Nullable
@@ -177,7 +177,7 @@ public class GroupMessageService extends Service {
                     e.printStackTrace();
                 }
             }
-            sendBroadcast(new Intent(context, Activity_Messaging.MessageReceiver.class));
+            //sendBroadcast(new Intent(context, Activity_Messaging.MessageReceiver.class));
             stopSelf();
         }
     }

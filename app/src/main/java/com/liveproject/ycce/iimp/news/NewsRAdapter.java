@@ -82,8 +82,13 @@ public class NewsRAdapter extends RecyclerView.Adapter<NewsRAdapter.NewsHolder> 
             tv_date.setText(n.getDatePosted());
             tv_message.setText(n.getMessage());
            // File file = new File(n);
-            iv_news.setImageURI(android.net.Uri.parse(n.getImage_loc()));
-
+            try {
+                if(n.getImage_loc()!=null) {
+                    iv_news.setImageURI(android.net.Uri.parse(n.getImage_loc()));
+                }
+                else
+                    iv_news.setImageResource(R.drawable.logo_crop);
+            }catch (Exception e){e.printStackTrace();}
 
             // For now a default image is being set here.
 

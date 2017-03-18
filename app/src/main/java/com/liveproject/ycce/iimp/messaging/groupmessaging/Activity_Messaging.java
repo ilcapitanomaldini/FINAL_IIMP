@@ -114,11 +114,11 @@ public class Activity_Messaging extends AppCompatActivity {
                     message.setPollID("null");
                     message.setMid("null");
                     DatabaseService.insertMessage(message);
-                    if (Validation.isOnline(v.getContext()))
+                    /*if (Validation.isOnline(v.getContext()))
                     {
                         Intent intent1 = new Intent(v.getContext(),UpdateService.class);
                         v.getContext().startService(intent1);
-                    }
+                    }*/
                     messagelist = new ArrayList<Message>();
                     messagelist = DatabaseService.fetchMessages(currentgid);
 
@@ -222,11 +222,11 @@ public class Activity_Messaging extends AppCompatActivity {
                 adapter = new Adapter_Group_Message(messagelist);
                 rv.setAdapter(adapter);
             }
-            if (Validation.isOnline(this))
+            /*if (Validation.isOnline(this))
             {
                 Intent intent1 = new Intent(this,UpdateService.class);
                 this.startService(intent1);
-            }
+            }*/
         }
         if(requestCode==2){
             messagelist = new ArrayList<Message>();
@@ -276,5 +276,15 @@ public class Activity_Messaging extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (Validation.isOnline(this))
+        {
+            Intent intent1 = new Intent(this,UpdateService.class);
+            this.startService(intent1);
+        }
     }
 }

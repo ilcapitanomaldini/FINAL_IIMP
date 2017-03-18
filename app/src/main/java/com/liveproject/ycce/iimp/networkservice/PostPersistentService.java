@@ -1,7 +1,9 @@
 package com.liveproject.ycce.iimp.networkservice;
 
-import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -20,27 +22,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Laptop on 12-02-2017.
+ * Created by Laptop on 18-03-2017.
  */
 
-    //Service class for volley Get request. Uses IntentService
-    //Expects URL, NAME and JSONOBJECT as String extras. The second is the name of the
-    // broadcast receiver that was created for handling the result of this request.
-public class PostService extends IntentService {
-
+public class PostPersistentService extends Service {
     private String URL;
     private String result;
     private JSONObject json_object;
     private String receiver_name;
     private String contextString;
     final String TAG = "PostService" ;
-
-    public PostService() {
-        super("PostService");
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
-    protected void onHandleIntent(final Intent intent) {
+    public void onCreate() {
+        super.onCreate();
+        Log.d(TAG, "onHandleIntent: Service Started. " + receiver_name);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, final int startId) {
         URL = intent.getStringExtra("URL");
         receiver_name = intent.getStringExtra("NAME");
 
@@ -54,7 +59,7 @@ public class PostService extends IntentService {
         }catch (JSONException e){
             Log.d(TAG, "onHandleIntent: Exception in JSONObject");
         }
-        Log.d(TAG, "onHandleIntent: Service Started. " + receiver_name);
+
 
         //Adapt the following code according to the standards used in the main project.
 
@@ -68,6 +73,7 @@ public class PostService extends IntentService {
                                 i.putExtra("ExtraContext",contextString);
                             Log.d(TAG, "onResponse: " + response + " for " + receiver_name);
                             sendBroadcast(i);
+                            stopSelf();
                         }
                         else Log.d(TAG, "onResponse: Message received Response : "+ response);
                     }
@@ -78,6 +84,7 @@ public class PostService extends IntentService {
                         Intent i = new Intent("android.intent.action."+receiver_name).putExtra("Error", "true");
                         sendBroadcast(i);
                         Log.e(TAG, "onErrorResponse: ExceptionVolley " + error.toString(), error);
+                        stopSelf();
                     }
                 }) {
             @Override
@@ -106,5 +113,7 @@ public class PostService extends IntentService {
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         VolleySingleton.getRequestQueue().add(stringRequest);
+
+        return super.onStartCommand(intent, flags, startId);
     }
 }
