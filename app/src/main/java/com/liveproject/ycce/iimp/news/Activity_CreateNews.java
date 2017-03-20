@@ -3,11 +3,14 @@ package com.liveproject.ycce.iimp.news;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.R;
@@ -30,8 +33,8 @@ public class Activity_CreateNews extends AppCompatActivity {
     private byte[] multipartBody;
 
 
-    private EditText title,body;
-    private Button create,image_selector;
+    private EditText title, body;
+    private Button create, image_selector;
     private ImageView imageView;
     private String imageloc;
 
@@ -39,7 +42,18 @@ public class Activity_CreateNews extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_news);
-        final Intent intent = new Intent(this,Activity_File.class);
+        final Intent intent = new Intent(this, Activity_File.class);
+
+        try {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+            setSupportActionBar(toolbar);
+            TextView tv_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
+            tv_title.setText("Create News");
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            Log.e("Toolbar", "onCreate: " + e.toString());
+        }
 
         title = (EditText) findViewById(R.id.et_cnews_title_name);
         body = (EditText) findViewById(R.id.et_cnews_message_body);
@@ -52,26 +66,26 @@ public class Activity_CreateNews extends AppCompatActivity {
             public void onClick(View v) {
                 //Receive the path here and make the imageView visible and set its source.
 
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
 
             }
         });
 
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 1) {
             // make use of "data"
 
-             try
-             {
-                 final File file = new File(data.getStringExtra("FilePath"));
-                 imageView.setVisibility(View.VISIBLE);
-                 imageView.setImageURI(android.net.Uri.parse(file.toURI().toString()));
-                 imageloc = file.toURI().toString();
-             }
-             catch (NullPointerException e){
-                 Log.d("CreateNews : ", "onActivityResult: null file");}
+            try {
+                final File file = new File(data.getStringExtra("FilePath"));
+                imageView.setVisibility(View.VISIBLE);
+                imageView.setImageURI(android.net.Uri.parse(file.toURI().toString()));
+                imageloc = file.toURI().toString();
+            } catch (NullPointerException e) {
+                Log.d("CreateNews : ", "onActivityResult: null file");
+            }
 
             create.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,9 +98,8 @@ public class Activity_CreateNews extends AppCompatActivity {
                     news.setMessage(body.getText().toString());
                     news.setImage_loc(imageloc);
                     DatabaseService.insertNewNews(news);
-                    if (Validation.isOnline(v.getContext()))
-                    {
-                        Intent intent1 = new Intent(v.getContext(),UpdateService.class);
+                    if (Validation.isOnline(v.getContext())) {
+                        Intent intent1 = new Intent(v.getContext(), UpdateService.class);
                         v.getContext().startService(intent1);
                     }
                     //Trial to send the image file onto the server.
@@ -137,45 +150,54 @@ public class Activity_CreateNews extends AppCompatActivity {
             });
         }
     }
- /*   private void buildPart(DataOutputStream dataOutputStream, byte[] fileData, String fileName) throws IOException {
-        dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
-        dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\"; filename=\""
-                + fileName + "\"" + lineEnd);
-        dataOutputStream.writeBytes(lineEnd);
 
-        ByteArrayInputStream fileInputStream = new ByteArrayInputStream(fileData);
-        int bytesAvailable = fileInputStream.available();
+    /*   private void buildPart(DataOutputStream dataOutputStream, byte[] fileData, String fileName) throws IOException {
+           dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
+           dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\"; filename=\""
+                   + fileName + "\"" + lineEnd);
+           dataOutputStream.writeBytes(lineEnd);
 
-        int maxBufferSize = 1024 * 1024;
-        int bufferSize = Math.min(bytesAvailable, maxBufferSize);
-        byte[] buffer = new byte[bufferSize];
+           ByteArrayInputStream fileInputStream = new ByteArrayInputStream(fileData);
+           int bytesAvailable = fileInputStream.available();
 
-        // read file and write it into form...
-        int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+           int maxBufferSize = 1024 * 1024;
+           int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+           byte[] buffer = new byte[bufferSize];
 
-        while (bytesRead > 0) {
-            dataOutputStream.write(buffer, 0, bufferSize);
-            bytesAvailable = fileInputStream.available();
-            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+           // read file and write it into form...
+           int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+           while (bytesRead > 0) {
+               dataOutputStream.write(buffer, 0, bufferSize);
+               bytesAvailable = fileInputStream.available();
+               bufferSize = Math.min(bytesAvailable, maxBufferSize);
+               bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+           }
+
+           dataOutputStream.writeBytes(lineEnd);
+       }
+
+       public static byte[] getFileDataFromDrawable(Context context, Drawable drawable) {
+           Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+           ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+           bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+           return byteArrayOutputStream.toByteArray();
+       }
+       private byte[] getFileDataFromDrawable(Context context, int id) {
+           Drawable drawable = ContextCompat.getDrawable(context, id);
+           Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+           ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+           bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream);
+           return byteArrayOutputStream.toByteArray();
+       }
+   */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
         }
-
-        dataOutputStream.writeBytes(lineEnd);
+        return true;
     }
-
-    public static byte[] getFileDataFromDrawable(Context context, Drawable drawable) {
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
-    }
-    private byte[] getFileDataFromDrawable(Context context, int id) {
-        Drawable drawable = ContextCompat.getDrawable(context, id);
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
-    }
-*/
 }
 

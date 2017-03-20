@@ -35,12 +35,14 @@ public class GroupMessageService extends Service {
     private String currentgid;
     final private String getPollAM = "https://ycc-developer-edition.ap2.force.com/member/services/apexrest/getpollresult";
     final private String groupmessagesURL = "https://ycc-developer-edition.ap2.force.com/member/services/apexrest/getmygroupmessage";
-    BroadcastReceiver receiver,pamreceiver;
+    BroadcastReceiver receiver, pamreceiver;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -60,7 +62,7 @@ public class GroupMessageService extends Service {
         Intent volleyIntent_groups;
         volleyIntent_groups = new Intent(this, PostService.class);
         volleyIntent_groups.putExtra("URL", groupmessagesURL);
-        volleyIntent_groups.putExtra("NAME","GroupMessageReceiver");
+        volleyIntent_groups.putExtra("NAME", "GroupMessageReceiver");
 
         final JSONObject params_groups = new JSONObject();
         try {
@@ -69,47 +71,47 @@ public class GroupMessageService extends Service {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        volleyIntent_groups.putExtra("JSONOBJECT",params_groups.toString());
+        volleyIntent_groups.putExtra("JSONOBJECT", params_groups.toString());
         startService(volleyIntent_groups);
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public class GroupMessageReceiver extends BroadcastReceiver{
+    public class GroupMessageReceiver extends BroadcastReceiver {
         String type;
 
         @Override
         public void onReceive(Context context, Intent intent) {
             String result = intent.getStringExtra("Result");
             try {
-                JSONArray outerJsonArray = new JSONArray(result);
-                for(int counter = 0; counter<outerJsonArray.length(); counter++){
-                    JSONObject outerJsonObject = outerJsonArray.getJSONObject(counter);
-                    Message message = new Message();
-                    message.setSender(outerJsonObject.getString("From__c"));
-                    message.setMessage(outerJsonObject.getString("Message__c"));
-                    message.setMid(outerJsonObject.getString("Id"));
-                    message.setGid(outerJsonObject.getString("Group_Id__c"));
-                    message.setType(outerJsonObject.getString("Type__c"));
-                    type = outerJsonObject.getString("Type__c");
-                    if(type.equals("event")){
-                        //For type event.
-                        JSONObject eventJsonObject = outerJsonObject.getJSONObject("Event_Details_Id__r");
-                        Event event = new Event();
-                        event.setEID(eventJsonObject.getString("Id"));
-                        String dateTime = eventJsonObject.getString("Event_Date_Time__c");
-                        event.setDateTime(dateTime.substring(0,dateTime.indexOf('.'))+"Z");
-                        event.setStatus("new");
-                        //TODO : Duration
-                        event.setDuration("null");
-                        event.setEventMessage(outerJsonObject.getString("Message__c"));
-                        event.setGID(outerJsonObject.getString("Group_Id__c"));
-                        event.setPostedBy(outerJsonObject.getString("From__c"));
-                        DatabaseService.insertnewEvent(event);
-                        message.setEventID(eventJsonObject.getString("Id"));
-                        message.setPollID("null");
-                    }
-                    else if (type.equals("poll")){
-                        continue;/*
+                if (result != null) {
+                    JSONArray outerJsonArray = new JSONArray(result);
+                    for (int counter = 0; counter < outerJsonArray.length(); counter++) {
+                        JSONObject outerJsonObject = outerJsonArray.getJSONObject(counter);
+                        Message message = new Message();
+                        message.setSender(outerJsonObject.getString("From__c"));
+                        message.setMessage(outerJsonObject.getString("Message__c"));
+                        message.setMid(outerJsonObject.getString("Id"));
+                        message.setGid(outerJsonObject.getString("Group_Id__c"));
+                        message.setType(outerJsonObject.getString("Type__c"));
+                        type = outerJsonObject.getString("Type__c");
+                        if (type.equals("event")) {
+                            //For type event.
+                            JSONObject eventJsonObject = outerJsonObject.getJSONObject("Event_Details_Id__r");
+                            Event event = new Event();
+                            event.setEID(eventJsonObject.getString("Id"));
+                            String dateTime = eventJsonObject.getString("Event_Date_Time__c");
+                            event.setDateTime(dateTime.substring(0, dateTime.indexOf('.')) + "Z");
+                            event.setStatus("new");
+                            //TODO : Duration
+                            event.setDuration("null");
+                            event.setEventMessage(outerJsonObject.getString("Message__c"));
+                            event.setGID(outerJsonObject.getString("Group_Id__c"));
+                            event.setPostedBy(outerJsonObject.getString("From__c"));
+                            DatabaseService.insertnewEvent(event);
+                            message.setEventID(eventJsonObject.getString("Id"));
+                            message.setPollID("null");
+                        } else if (type.equals("poll")) {
+                            continue;/*
                         JSONObject pollJsonObject = outerJsonObject.getJSONObject("Poll_Id__r");
                         Poll poll = new Poll();
                         poll.setPid(pollJsonObject.getString("Id"));
@@ -136,30 +138,32 @@ public class GroupMessageService extends Service {
                         }
                         pamIntent.putExtra("JSONOBJECT",params_pam.toString());
                         startService(pamIntent);*/
+                        }
+                        DatabaseService.insertMessage(message);
                     }
-                    DatabaseService.insertMessage(message);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(!"poll".equals(type)) {
+            if (!"poll".equals(type)) {
                 sendBroadcast(new Intent(context, Activity_Messaging.MessageReceiver.class));
                 stopSelf();
             }
+
         }
     }
 
-    public class PAMReceiver extends BroadcastReceiver{
+    public class PAMReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             String result = intent.getStringExtra("Result");
-            if(result!=null) {
+            if (result != null) {
                 try {
                     JSONArray jsonArray = new JSONArray(result);
                     ArrayList<PollMapping> pollMappings = new ArrayList<>();
                     Poll poll = DatabaseService.fetchPoll(jsonArray.getJSONObject(0).getString("Poll_Id__c"));
-                    if(poll!=null) {
+                    if (poll != null) {
                         DatabaseService.deletePollByID(jsonArray.getJSONObject(0).getString("Poll_Id__c"));
                         for (int counter = 0; counter < jsonArray.length(); counter++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(counter);

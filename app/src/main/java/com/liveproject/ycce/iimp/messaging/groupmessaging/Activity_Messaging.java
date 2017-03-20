@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.liveproject.ycce.iimp.DatabaseService;
 import com.liveproject.ycce.iimp.NullAdapter;
@@ -37,16 +38,17 @@ public class Activity_Messaging extends AppCompatActivity {
     // private MessageRAdapter adapter;
     private Adapter_Group_Message adapter;
     private ArrayList<Message> messagelist;
-    String currentgid="101";
+    String currentgid = "101";
     String groupname;
     String grouprole;
     BroadcastReceiver receiver;
 
     private Toolbar toolbar;
-    private FloatingActionButton fab_events,fab_poll, fab_send;
+    private FloatingActionButton fab_events, fab_poll, fab_send;
     private RecyclerView rv;
     private LinearLayoutManager llm;
     private EditText sender;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +71,9 @@ public class Activity_Messaging extends AppCompatActivity {
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(),Activity_Group_Details.class);
+                Intent intent = new Intent(getBaseContext(), Activity_Group_Details.class);
                 intent.putExtra("GID", currentgid);
-                intent.putExtra("GNAME",groupname);
+                intent.putExtra("GNAME", groupname);
                 startActivity(intent);
             }
         });
@@ -81,14 +83,14 @@ public class Activity_Messaging extends AppCompatActivity {
         fab_events = (FloatingActionButton) findViewById(R.id.fab_event);
         fab_poll = (FloatingActionButton) findViewById(R.id.fab_poll);
 
-        if(!grouprole.equals(Constants.GROUPROLES[2])) {
+        if (!grouprole.equals(Constants.GROUPROLES[2])) {
 
             fab_events.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getBaseContext(), Activity_CreateEvent.class);
                     intent.putExtra("gid", currentgid);
-                    startActivityForResult(intent,1);
+                    startActivityForResult(intent, 1);
                 }
             });
 
@@ -97,42 +99,42 @@ public class Activity_Messaging extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(getBaseContext(), Activity_CreatePoll.class);
                     intent.putExtra("gid", currentgid);
-                    startActivityForResult(intent,2);
+                    startActivityForResult(intent, 2);
                 }
             });
 
-            fab_send.setOnClickListener(new View.OnClickListener() {
+            if (sender.getText().toString() != null) {
+                fab_send.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    //TO DO :: Add a send_message_to_cloud() function here. SQLite for demonstration purposes only.
-                    Message message = new Message();
-                    message.setType("text");
-                    message.setSender(DatabaseService.fetchID());
-                    message.setMessage(sender.getText().toString());
-                    message.setGid(currentgid);
-                    message.setEventID("null");
-                    message.setPollID("null");
-                    message.setMid("null");
-                    DatabaseService.insertMessage(message);
+                    @Override
+                    public void onClick(View v) {
+                        //TO DO :: Add a send_message_to_cloud() function here. SQLite for demonstration purposes only.
+                        Message message = new Message();
+                        message.setType("text");
+                        message.setSender(DatabaseService.fetchID());
+                        message.setMessage(sender.getText().toString());
+                        message.setGid(currentgid);
+                        message.setEventID("null");
+                        message.setPollID("null");
+                        message.setMid("null");
+                        DatabaseService.insertMessage(message);
                     /*if (Validation.isOnline(v.getContext()))
                     {
                         Intent intent1 = new Intent(v.getContext(),UpdateService.class);
                         v.getContext().startService(intent1);
                     }*/
-                    messagelist = new ArrayList<Message>();
-                    messagelist = DatabaseService.fetchMessages(currentgid);
+                        messagelist = new ArrayList<Message>();
+                        messagelist = DatabaseService.fetchMessages(currentgid);
 
-                    //TODO : Add an actual notifyItemInserted.
-                    if(messagelist!=null) {
-                        adapter = new Adapter_Group_Message(messagelist);
-                        rv.setAdapter(adapter);
+                        //TODO : Add an actual notifyItemInserted.
+                        if (messagelist != null) {
+                            adapter = new Adapter_Group_Message(messagelist);
+                            rv.setAdapter(adapter);
+                        }
                     }
-                }
-            });
-        }
-        else
-        {
+                });
+            }
+        } else {
             fab_events.setVisibility(View.GONE);
             fab_poll.setVisibility(View.GONE);
             findViewById(R.id.ll_text_sender).setVisibility(View.GONE);
@@ -140,7 +142,7 @@ public class Activity_Messaging extends AppCompatActivity {
 
 
         rv = (RecyclerView) findViewById(R.id.rv_messaging);
-        llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,true);
+        llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
 
         //Trial to reverse the layout.
         //llm.setReverseLayout(true);
@@ -154,18 +156,17 @@ public class Activity_Messaging extends AppCompatActivity {
 
         //Call adapter for recyclerview layout by passing the arraylist.
         // adapter = new MessageRAdapter(messagelist);
-        if(messagelist!=null) {
+        if (messagelist != null) {
             adapter = new Adapter_Group_Message(messagelist);
             rv.setAdapter(adapter);
-        }
-        else{
+        } else {
             ArrayList<String> strings = new ArrayList<String>();
             strings.add("No Messages!");
             rv.setAdapter(new NullAdapter(strings));
         }
         Intent intent = new Intent(this, GroupMessageService.class);
-        intent.putExtra("gid",currentgid);
-        intent.putExtra("receiver","MessageReceiver");
+        intent.putExtra("gid", currentgid);
+        intent.putExtra("receiver", "MessageReceiver");
         startService(intent);
         setRecyclerViewScrollListener();
 
@@ -177,15 +178,15 @@ public class Activity_Messaging extends AppCompatActivity {
           if(messagelist.size()==0)
               getmessages(currentgid);
       }*/
-    public void getmessages(String currentgid)
-    {
+    public void getmessages(String currentgid) {
         //sqlite code
         messagelist = DatabaseService.fetchMessages(currentgid);
     }
 
 
-    private int getLastVisible(){ return llm.findLastVisibleItemPosition(); }
-
+    private int getLastVisible() {
+        return llm.findLastVisibleItemPosition();
+    }
 
 
     private void setRecyclerViewScrollListener() {
@@ -194,7 +195,7 @@ public class Activity_Messaging extends AppCompatActivity {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 int totalItemCount = rv.getLayoutManager().getItemCount();
-                if ( totalItemCount == getLastVisible() + 1) {
+                if (totalItemCount == getLastVisible() + 1) {
                     //Here, add the function that would fetch the new data from sqlite.
                     getmessages(currentgid);
                 }
@@ -202,24 +203,24 @@ public class Activity_Messaging extends AppCompatActivity {
         });
     }
 
-  /*  @Override
-    protected void onResume() {
-        super.onResume();
-        messagelist = new ArrayList<Message>();
-        messagelist = DatabaseService.fetchMessages(currentgid);
-        if(messagelist!=null) {
-            adapter = new Adapter_Group_Message(messagelist);
-            rv.setAdapter(adapter);
-        }
-    }
-*/
+    /*  @Override
+      protected void onResume() {
+          super.onResume();
+          messagelist = new ArrayList<Message>();
+          messagelist = DatabaseService.fetchMessages(currentgid);
+          if(messagelist!=null) {
+              adapter = new Adapter_Group_Message(messagelist);
+              rv.setAdapter(adapter);
+          }
+      }
+  */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1){
+        if (requestCode == 1) {
             messagelist = new ArrayList<Message>();
             messagelist = DatabaseService.fetchMessages(currentgid);
-            if(messagelist!=null) {
+            if (messagelist != null) {
                 adapter = new Adapter_Group_Message(messagelist);
                 rv.setAdapter(adapter);
             }
@@ -229,21 +230,21 @@ public class Activity_Messaging extends AppCompatActivity {
                 this.startService(intent1);
             }*/
         }
-        if(requestCode==2){
+        if (requestCode == 2) {
             messagelist = new ArrayList<Message>();
             messagelist = DatabaseService.fetchMessages(currentgid);
-            if(messagelist!=null) {
+            if (messagelist != null) {
                 adapter = new Adapter_Group_Message(messagelist);
                 rv.setAdapter(adapter);
             }
-            if (Validation.isOnline(this))
-            {
-                Intent intent1 = new Intent(this,UpdateService.class);
+            if (Validation.isOnline(this)) {
+                Intent intent1 = new Intent(this, UpdateService.class);
                 this.startService(intent1);
             }
         }
     }
-    public class MessageReceiver extends BroadcastReceiver{
+
+    public class MessageReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -252,11 +253,10 @@ public class Activity_Messaging extends AppCompatActivity {
 
             //Call adapter for recyclerview layout by passing the arraylist.
             // adapter = new MessageRAdapter(messagelist);
-            if(messagelist!=null) {
+            if (messagelist != null) {
                 adapter = new Adapter_Group_Message(messagelist);
                 rv.setAdapter(adapter);
-            }
-            else{
+            } else {
                 ArrayList<String> strings = new ArrayList<String>();
                 strings.add("No Messages!");
                 rv.setAdapter(new NullAdapter(strings));
@@ -282,9 +282,8 @@ public class Activity_Messaging extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (Validation.isOnline(this))
-        {
-            Intent intent1 = new Intent(this,UpdateService.class);
+        if (Validation.isOnline(this)) {
+            Intent intent1 = new Intent(this, UpdateService.class);
             this.startService(intent1);
         }
     }
